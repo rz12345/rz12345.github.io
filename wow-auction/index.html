@@ -10,14 +10,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js" integrity="sha256-qoN08nWXsFH+S9CtIq99e5yzYHioRHtNB9t2qy1MSmc=" crossorigin="anonymous"></script>
+    <!-- Wowhead tootips -->
+    <script>const whTooltips = {colorLinks: false, iconizeLinks: false, renameLinks: false};</script>
+    <script src="https://wow.zamimg.com/widgets/power.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KPSB6R7TZ1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M4K9LJDC3G"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'G-KPSB6R7TZ1');
+      gtag('config', 'G-M4K9LJDC3G');
     </script>
     <title>WOW交易大師</title>
 </head>
@@ -29,8 +32,9 @@
         <li class="nav-item">
           <span class="nav-link" style="font-size: 24px; color: Dodgerblue;"><i class="fab fa-battle-net"></i></span>
         </li>
-        <select name="realm" v-on:change="fetchAuctionData(Select.RealmId, Select.ItemId)" v-model="Select.RealmId">
-          <option v-for="(realm,realm_id) in Realms" :value="realm_id" :selected="Select.RealmId == realm_id">{{realm.join(',')}}</option>
+        <select name="realm" v-on:change="selectRealm()" v-model="Select.RealmId">
+          <option value="" selected disabled>--- 選擇伺服器 ---</option>
+          <option v-for="(realm,realm_id) in Realms" :value="realm_id">{{realm.join(',')}}</option>
         </select>
       </ul>
       <!-- ItemClasses -->
@@ -56,7 +60,7 @@
             <span class="nav-link">↑↑↑請選擇子類↑↑↑</span>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" v-for="item in ItemRecords" v-on:click="selectItem(item.id,item.name)" v-bind:class="{active: Select.ItemId == item.id}">{{item.name}}</a>
+            <a class="nav-link" href="#" v-for="item in ItemRecords" v-on:click="selectItem(item.id,item.name)" v-bind:class="{active: Select.ItemId == item.id}" :data-wowhead="'item='+item.id">{{item.name}}</a>
           </li>
         </ul>
       </div>
@@ -75,7 +79,9 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item">{{Select.ItemSubClassName}}</li>
-              <li class="breadcrumb-item">{{Select.ItemName}}</li>
+              <li class="breadcrumb-item">
+                <a :href="`https://www.wowhead.com/item=${Select.ItemId}/`" target="_blank">{{Select.ItemName}}</a>
+              </li>
             </ol>
           </nav>
           <!-- Chart -->

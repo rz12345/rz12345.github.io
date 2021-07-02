@@ -6,11 +6,11 @@ var app = new Vue({
         Realms:[],
         LiveChart:'',
         Select: {
-            ItemClassName:'消耗品',
-            ItemSubClassName:'精煉藥劑',
-            ItemName:'鬼靈威力精煉藥劑',
-            ItemId:'171276',
-            RealmId:'980',
+            ItemClassName:'', // 消耗品
+            ItemSubClassName:'', // 精煉藥劑
+            ItemName:'', // 鬼靈威力精煉藥劑
+            ItemId:'', // 171276
+            RealmId:'', // 980
         },
         FetchComplete:true,
         NoticeMsg:'',
@@ -19,12 +19,17 @@ var app = new Vue({
         selectItem(item_id,item_name) {
             this.Select.ItemId = item_id; 
             this.Select.ItemName = item_name;
-            gtag('event', 'Item Click', {
-                'event_category': 'Click',
+            gtag('event', 'Click', {
+                'event_category': 'Item',
                 'event_label': item_name,
-                //'value': 500
             });
             this.fetchAuctionData(this.Select.RealmId,item_id);
+        },
+        selectRealm(){
+            gtag('event', 'Click', {
+                'event_category': 'Realm',
+                'event_label': this.Select.RealmId,
+            });
         },
         convertPrice(price){
             let g = parseInt(price/10000);
@@ -146,8 +151,6 @@ var app = new Vue({
         }.bind(this));
         // chart initial
         this.drawChart();
-        // data initial
-        this.fetchAuctionData(this.Select.RealmId,this.Select.ItemId);
     },
     computed: {
         ItemClasses: function(){
