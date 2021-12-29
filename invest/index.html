@@ -66,12 +66,12 @@
                 <tbody>
                   <!-- reverse sort by date -->
                   <tr v-for="record in BackTradeRecords">
-                    <td v-bind:class="{'text-success': record.irr >= 0.1}"><a :href="'https://finance.yahoo.com/chart/'+record.stock_code" target="_blank" rel="noopener noreferrer">{{record.stock_code}}</a></td>
+                    <td><a :href="'https://finance.yahoo.com/chart/'+record.stock_code" target="_blank" rel="noopener noreferrer">{{record.stock_code}}</a></td>
                     <td>{{record.size}}</td>
                     <td>{{record.value}}</td>
                     <td>{{record.cash}}</td>
                     <td>{{record.div_cash}}</td>                
-                    <td>{{record.irr}}</td>
+                    <td v-bind:class="{'text-success': record.irr >= 0.1}">{{record.irr}}</td>
                     <td>{{record.roi}}</td>
                     <td>{{record.start_date}} ~ {{record.end_date}}</td>
                   </tr>
