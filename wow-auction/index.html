@@ -62,7 +62,7 @@
             <span class="nav-link">↑↑↑請選擇子類↑↑↑</span>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" v-for="item in ItemRecords" v-on:click="selectItem(item.id,item.name)" v-bind:class="{active: Select.ItemId == item.id}" :data-wowhead="'item='+item.id">{{item.name}}</a>
+            <a class="nav-link" href="#" v-for="item in ItemRecords" v-on:click="selectItem(item.id,item.name)" v-bind:class="{active: Select.ItemId == item.id}" :data-wowhead="'item='+item.id">{{item.name}} ({{item.level}})</a>
           </li>
         </ul>
       </div>
