@@ -3,14 +3,14 @@ var app = new Vue({
     data: {
         AuctionRecords:[],
         Items:[],
-        Realms:[],
+        //Realms:[],
         LiveChart:'',
         Select: {
             ItemClassName:'', // 消耗品
             ItemSubClassName:'', // 精煉藥劑
             ItemName:'', // 鬼靈威力精煉藥劑
             ItemId:'', // 171276
-            RealmId:'', // 980
+            //RealmId:'', // 980
         },
         FetchComplete:true,
         NoticeMsg:'',
@@ -19,18 +19,24 @@ var app = new Vue({
         selectItem(item_id,item_name) {
             this.Select.ItemId = item_id; 
             this.Select.ItemName = item_name;
+            gtag('event', 'SelectItem', {'Item': item_name});
+            /*
             gtag('event', 'Click', {
                 'event_category': 'Item',
                 'event_label': item_name,
             });
-            this.fetchAuctionData(this.Select.RealmId,item_id);
+            */
+            this.fetchAuctionData(item_id);
         },
-        selectRealm(){
+        //selectRealm(){
+        //    gtag('event', 'SelectRealm', {'Realm': this.Realms[this.Select.RealmId].join(',')});
+            /*
             gtag('event', 'Click', {
                 'event_category': 'Realm',
                 'event_label': this.Select.RealmId,
             });
-        },
+            */
+        //},
         convertPrice(price){
             let g = parseInt(price/10000);
             let s = parseInt((price%10000)/100);
@@ -126,10 +132,10 @@ var app = new Vue({
             ];
             this.LiveChart.update();
         },
-        fetchAuctionData(realm_id,item_id){
+        fetchAuctionData(item_id){
             this.FetchComplete = false;
             this.AuctionRecords = []; // 清空一次
-            axios.get(`https://wow-auction-7d35e-default-rtdb.firebaseio.com/auction/${realm_id}/${item_id}.json`).then(function(res){
+            axios.get(`https://wow-auction-7d35e-default-rtdb.firebaseio.com/auction/${item_id}.json`).then(function(res){
                 if(res.data != null){
                     this.AuctionRecords = res.data;
                     this.NoticeMsg = '';
@@ -144,11 +150,13 @@ var app = new Vue({
     mounted: function(){
         // item & realm data initial 
         axios.get(`https://wow-auction-7d35e-default-rtdb.firebaseio.com/item_focus_list.json`).then(function(res){
-            this.Items = res.data;
+            this.Items = res.data.filter(d => d.id > 190000);
         }.bind(this));
+        /*
         axios.get(`https://wow-auction-7d35e-default-rtdb.firebaseio.com/realm_sets.json`).then(function(res){
             this.Realms = res.data;
         }.bind(this));
+        */
         // chart initial
         this.drawChart();
     },
