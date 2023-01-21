@@ -1,20 +1,46 @@
 <!DOCTYPE html>
 <html>
 
-<head>
+  <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      rel="stylesheet" type="text/css" />
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="css/app.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    <!--
+<script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
+      integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js"
+      integrity="sha512-BKbSR+cfyxLdMAsE0naLReFSLg8/pjbgfxHh/k/kUC82Hy7r6HtR5hLhobaln2gcTvzkyyehrdREdjpsQwy2Jw=="
+      crossorigin="anonymous"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.4.3/vue-router.min.js"
+      integrity="sha512-mVyZZ423iwLddhRdWCJeQSysHfnDZZPJRlY9HJI6/39e6D8Myz3nQCelJmSMOf8MOreTzWDmh8bYftrBnTau1Q=="
+      crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.2/src/httpVueLoader.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"
+      integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg=="
+      crossorigin="anonymous"></script>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js" integrity="sha256-qoN08nWXsFH+S9CtIq99e5yzYHioRHtNB9t2qy1MSmc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"
+      integrity="sha256-qoN08nWXsFH+S9CtIq99e5yzYHioRHtNB9t2qy1MSmc="
+      crossorigin="anonymous"></script>
     <!-- Wowhead tootips -->
     <script>const whTooltips = {colorLinks: false, iconizeLinks: false, renameLinks: false};</script>
     <script src="https://wow.zamimg.com/widgets/power.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD462ZBMPC"></script>
+    <script async
+      src="https://www.googletagmanager.com/gtag/js?id=G-CD462ZBMPC"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -23,99 +49,61 @@
       gtag('config', 'G-CD462ZBMPC');
     </script>
     <title>魔獸拍賣場看板</title>
-</head>
-<body>
-  <div id="app" class="container">
-    <div class="jumbotron">
-      <!-- Realms -->
-      <ul class="nav nav-pills">
-        <li class="nav-item">
-          <span class="nav-link" style="font-size: 24px; color: Dodgerblue;"><i class="fab fa-battle-net"></i> 魔獸拍賣場看板 (10.0.2)</span>
-        </li>
-        
-        <!--
-        <select name="realm" v-on:change="selectRealm()" v-model="Select.RealmId">
-          <option value="" selected disabled>--- 選擇伺服器 ---</option>
-          <option v-for="(realm,realm_id) in Realms" :value="realm_id">{{realm.join(',')}}</option>
-        </select>
-        -->
-      </ul>
-      <!-- ItemClasses -->
-      <ul class="nav nav-pills">
-        <li class="nav-item"><span class="nav-link"><i class="fas fa-list"></i> 物品大類</span></li>
-        <li class="nav-item" v-for="item_class in ItemClasses">
-          <a class="nav-link" href="#" v-on:click="Select.ItemClassName = item_class" v-bind:class="{active: Select.ItemClassName == item_class}">{{item_class}}</a>
-        </li>
-      </ul>
-      <!-- ItemSubClasses -->
-      <ul class="nav nav-pills">
-        <li class="nav-item"><span class="nav-link"><i class="fas fa-list"></i> 物品子類</span></li>
-        <li class="nav-item" v-for="item_sub_class in ItemSubClasses">
-          <a class="nav-link" href="#" v-on:click="Select.ItemSubClassName = item_sub_class" v-bind:class="{active: Select.ItemSubClassName == item_sub_class}">{{item_sub_class}}</a>
-        </li>
-      </ul>
-    </div>
-  
-    <div class="row">
-      <div class="col-3">
-        <ul class="nav nav-pills flex-column">
-          <li class="nav-item" v-if="ItemRecords.length == 0">
-            <span class="nav-link">↑↑↑請選擇子類↑↑↑</span>
-          </li>
+  </head>
+  <body>
+    <div id="app" class="container">
+      <div class="jumbotron">
+        <ul class="nav nav-pills">
           <li class="nav-item">
-            <a class="nav-link" href="#" v-for="item in ItemRecords" v-on:click="selectItem(item.id,item.name)" v-bind:class="{active: Select.ItemId == item.id}" :data-wowhead="'item='+item.id">{{item.name}} ({{item.level}})</a>
+            <span class="nav-link" style="font-size: 24px; color: Dodgerblue;"><i
+                class="fab fa-battle-net"></i> <router-link to="/">魔獸拍賣場看板
+                (TW-巨龍崛起)</router-link></span>
           </li>
         </ul>
       </div>
-      <div class="col-9">
-        <!-- Loading -->
-        <div v-show="!FetchComplete">
-          <div class="d-flex align-items-center">
-            <strong>Loading...</strong>
-            <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+
+      <div class="row">
+        <!-- ItemClasses -->
+        <div class="col-md-3">
+          <div class="list-group list-group-root">
+            <div class="list-group-item list-group-item-action"
+              data-toggle="collapse" v-for="i in
+              ItemClasses" :key="i.id"
+              @click.self="selectItemClass(i.item_class_id,i.item_class_name)"
+              v-bind:class="{ 'active': i.item_class_name ==
+              Select.ItemClassName }">
+              <i class="fas" v-bind:class="{'fa-plus': i.item_class_name !=
+                Select.ItemClassName, 'fa-minus': i.item_class_name ==
+                Select.ItemClassName}"></i> {{ i.item_class_name }}
+              <div class="list-group collapse">
+                <router-link class="list-group-item list-group-item-action"
+                  v-for="j in
+                  i.item_subclass" :key="j.id"
+                  :to="{params:{ItemClass:Select.ItemClass,ItemSubClass:Select.ItemSubClass},name:'itemSubClass'}"
+                  @click.native="selectItemSubClass(j.item_subclass_id,j.item_subclass_name)"
+                  v-bind:class="{ 'active':
+                  j.item_subclass_name ==
+                  Select.ItemSubClassName }">{{ j.item_subclass_name }}</router-link>
+              </div>
+            </div>
           </div>
         </div>
-        <!-- Notice -->
-        <div v-show="FetchComplete">{{NoticeMsg}}</div>        
-        <div v-show="FetchComplete & AuctionRecords.length > 0">
-          <!-- Breadcrumb -->
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">{{Select.ItemSubClassName}}</li>
-              <li class="breadcrumb-item">
-                <a :href="`https://www.wowhead.com/item=${Select.ItemId}/`" target="_blank">{{Select.ItemName}}</a>
-              </li>
-            </ol>
-          </nav>
-          <!-- Chart -->
-          <canvas id="myChart"></canvas>
-          <!-- AuctionRecords -->
-          <table class="table">
-            <thead>
-              <tr>
-                <th>日期</th>
-                <th>最低價</th>
-                <th>最高價</th>
-                <th>中間價</th>
-                <th>貨量</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- reverse sort by date -->
-              <tr v-for="record in PriceRecords.sort( (a,b) => new Date(b.datetime) - new Date(a.datetime))">
-                <td>{{dayjs(record.datetime).format("YYYY-MM-DD (ddd)")}}</td>
-                <td>{{convertPrice(record.min)}}</td>
-                <td>{{convertPrice(record.max)}}</td>
-                <td>{{convertPrice(record.median)}}</td>
-                <td>{{record.qty}}</td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- Statics Data -->
+        <div class="col-md-9">
+          <router-view></router-view>
+          <div class="row" v-if="!$route.params.Item">
+            <router-link class="col-md-4" v-for="item in ItemRecords"
+              :to="{
+              params:{ItemClass:Select.ItemClass,ItemSubClass:Select.ItemSubClass,Item:item.id},
+              name:'Stat'}" @click.native.self="selectItem(item.id,item.name)"
+              :data-wowhead="'item='+item.id"
+              v-bind:key="item.id">{{item.name}} ({{item.level}})</router-link>
+          </div>
         </div>
       </div>
+
     </div>
-  </div>
     <script src="js/app.js"></script>
-</body>
+  </body>
 
 </html>
