@@ -38,11 +38,13 @@ const app = new Vue({
             Item: null,
             ItemName: null,
         },
+        SearchItemName: null,
     },
     methods: {
         selectItem(id,name) {
+            this.SearchItemName = null;
             this.Select.Item = id;
-            this.Select.ItemName = name;
+            this.Select.ItemName = name;            
             gtag('event', 'SelectItem', {
                 'Item': name
             });
@@ -77,14 +79,16 @@ const app = new Vue({
         ItemRecords: function () {
             return this.Items.filter(item => item.item_class_id == this.Select.ItemClass && item.item_subclass_id == this.Select.ItemSubClass);
         },
-
+        SearchItemRecords: function() {
+            return this.Items.filter(item=>item.name.includes(this.SearchItemName));
+        },
     },
     watch: {
         Select(newVal, oldVal) {
-            console.log(this.Select);
+            //console.log(this.Select);
         },
         $route(to, from) {
-            console.log(this.$route.params);
+            //console.log(this.$route.params);
 
         },
         deep: true,

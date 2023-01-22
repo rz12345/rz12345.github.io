@@ -63,8 +63,7 @@ module.exports = {
     },
     props: ['ItemClass', 'ItemSubClass', 'Item', 'ItemRecords'],
     methods: {
-        fetchAuctionData() {
-            item_id = this.$route.params.Item;
+        fetchAuctionData(item_id) {
             this.FetchComplete = false;
             this.AuctionRecords = []; // 清空一次
             axios.get(`https://wow-auction-7d35e-default-rtdb.firebaseio.com/auction/${item_id}.json`).then(function (res) {
@@ -76,6 +75,13 @@ module.exports = {
                 }
                 this.FetchComplete = true;
                 //this.updateChart();
+            }.bind(this));
+        },
+        fetchItemInfo(item_id) {
+            axios.get(`https://wow-auction-7d35e-default-rtdb.firebaseio.com/item_focus_list/${item_id}.json`).then(function (res) {
+                this.ItemName = res.data.name;
+                this.ItemClassName = res.data.item_class_name;
+                this.ItemSubClassName = res.data.item_subclass_name;
             }.bind(this));
         },
         convertPrice(price) {
@@ -177,27 +183,10 @@ module.exports = {
     mounted: function () {
         // chart initial
         this.drawChart();
-        this.fetchAuctionData();
-
-        // item data initial 
-        axios.get(`https://wow-auction-7d35e-default-rtdb.firebaseio.com/item_focus_list/${this.$route.params.Item}.json`).then(function (res) {
-            //this.Items = res.data;
-            this.ItemName = res.data.name;
-            this.ItemClassName = res.data.item_class_name;
-            this.ItemSubClassName = res.data.item_subclass_name;
-        }.bind(this));
+        this.fetchAuctionData(this.$route.params.Item);
+        this.fetchItemInfo(this.$route.params.Item);
     },
     computed: {
-        ItemClassName: function() {
-            //const s = this.ItemRecords.filter(item=>item.id == this.Item);
-            //console.log(s);
-        },
-        ItemSubClassName: function(){
-
-        },
-        ItemName: function() {
-
-        },
         NoticeMsg: function () {
             if (this.AuctionRecords.length > 0) {
                 this.NoticeMsg = '';
@@ -214,8 +203,11 @@ module.exports = {
             this.updateChart();
         },
         $route(to, from) {
-            this.fetchAuctionData();
-        }
+            this.fetchAuctionData(to.params.Item);
+            this.fetchItemInfo(to.params.Item);
+        },
+        deep: true,
+        immediate: true,
     }
 
 }
