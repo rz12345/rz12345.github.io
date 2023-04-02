@@ -95,7 +95,7 @@
                 <tbody>
                   <!-- reverse sort by date -->
                   <tr v-for="record in TargetPrices">
-                    <td><a :href="'https://tw.stock.yahoo.com/quote/'+record.ticker" target="_blank" rel="noopener noreferrer">{{record.stock_code}}</a></td>
+                    <td><a :href="'https://tw.stock.yahoo.com/quote/'+record.stock_code" target="_blank" rel="noopener noreferrer">{{record.stock_code}}</a></td>
                     <td v-bind:class="{'text-success': record.last - record.target_price < 0}">{{record.last}}</td>
                     <td>{{record.target_price}}</td>
                     <td>{{record.timestamp}}</td>
