@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!--<link href="css/app.css" rel="stylesheet" type="text/css" />-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>   
+    <title>台股回測與近場價</title>
+</head>
+<body>
+  <div id="app" class="container">
+    <div class="jumbotron">
+        <h1>台股看板</h1>
+        <ul class="nav nav-pills">            
+            <li class="nav-item">
+              <a class="nav-link" href="#" v-on:click="Select.ItemName = 'BackTradeRecords'" v-bind:class="{active: Select.ItemName == 'BackTradeRecords'}">回測效益</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" v-on:click="Select.ItemName = 'TargetPrice'" v-bind:class="{active: Select.ItemName == 'TargetPrice'}">進場價</a>
+              </li>
+          </ul>
+    </div>
+  
+    <div class="row">
+      <div class="col-12">
+        <div v-if="Select.ItemName == 'BackTradeRecords'">
+            <h2>模擬條件</h2>
+            <ul>
+                <li>起始現金30萬</li>
+                <li>交易稅率設為0</li>
+                <li>每次交易至少10單位</li>
+                <!--<li>每次交易間隔14天以上</li>-->
+                <li>買進條件
+                    <ul>
+                        <li>當RSI低於40(30)時</li>
+                        <li>進場價：從起始日，每當 RSI 6(12) 低於 30(40) 時記錄一次市價，取五次市價的平均。</li>
+                        <li>當開盤價 小於等於 「近5次RSI 6(12) 低於 30(40) 的平均市價」時購入。未持股情況下，首次購入20股</li>
+                        <li>市價於庫存價差的正負3%以內時，加碼10股</li>
+                        <li>市價低於庫存價差5%時，加碼20股</li>                
+                    </ul>
+                </li>
+                <li>賣出條件
+                    <ul>
+                        <li>當RSI高於70(80)時</li>
+                        <li>開盤價與庫存價差25%時賣出10股</li>
+                        <li>開盤價與庫存價差50%時賣出20股</li>
+                    </ul>
+                </li>
+            </ul>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th>代號</th>
+                    <th>持股</th>
+                    <th>股票現值</th>
+                    <th>現金</th>
+                    <th>配息</th>                
+                    <th>IRR</th>
+                    <th>ROI</th>
+                    <th>回測時間</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- reverse sort by date -->
+                  <tr v-for="record in BackTradeRecords">
+                    <td><a :href="'https://finance.yahoo.com/chart/'+record.stock_code" target="_blank" rel="noopener noreferrer">{{record.stock_code}}</a></td>
+                    <td>{{record.size}}</td>
+                    <td>{{record.value}}</td>
+                    <td>{{record.cash}}</td>
+                    <td>{{record.div_cash}}</td>                
+                    <td v-bind:class="{'text-success': record.irr >= 0.1}">{{record.irr}}</td>
+                    <td>{{record.roi}}</td>
+                    <td>{{record.start_date}} ~ {{record.end_date}}</td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+        <div v-if="Select.ItemName == 'TargetPrice'">
+            <ul>
+                <li>進場價：從起始日，每當 RSI 低於40時記錄一次價格，取五次價格的平均。</li>
+                <li>現價：於交易時段內，每15分鐘取一次價格</li>
+            </ul>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th>代號</th>
+                    <th>市價</th>
+                    <th>目標價</th>
+                    <th>美國時間</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- reverse sort by date -->
+                  <tr v-for="record in TargetPrices">
+                    <td><a :href="'https://finance.yahoo.com/chart/'+record.ticker" target="_blank" rel="noopener noreferrer">{{record.ticker}}</a></td>
+                    <td v-bind:class="{'text-success': record.last - record.target_price < 0}">{{record.last}}</td>
+                    <td>{{record.target_price}}</td>
+                    <td>{{record.timestamp}}</td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+        
+
+          
+      </div>
+    </div>
+  </div>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
