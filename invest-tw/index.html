@@ -35,16 +35,16 @@
                 <!--<li>每次交易間隔14天以上</li>-->
                 <li>買進條件
                     <ul>
-                        <li>當RSI低於40(30)時</li>
-                        <li>進場價：從起始日，每當 RSI 6(12) 低於 30(40) 時記錄一次市價，取五次市價的平均。</li>
-                        <li>當開盤價 小於等於 「近5次RSI 6(12) 低於 30(40) 的平均市價」時購入。未持股情況下，首次購入20股</li>
+                        <li>當RSI低於30時</li>
+                        <li>進場價：從起始日，每當 RSI 12 低於 30 時記錄一次市價，取五次市價的平均。</li>
+                        <li>當開盤價 小於等於 「近5次RSI 12 低於 30 的平均市價」時購入。未持股情況下，首次購入20股</li>
                         <li>市價於庫存價差的正負3%以內時，加碼10股</li>
                         <li>市價低於庫存價差5%時，加碼20股</li>                
                     </ul>
                 </li>
                 <li>賣出條件
                     <ul>
-                        <li>當RSI高於70(80)時</li>
+                        <li>當RSI高於80時</li>
                         <li>開盤價與庫存價差25%時賣出10股</li>
                         <li>開盤價與庫存價差50%時賣出20股</li>
                     </ul>
@@ -98,7 +98,7 @@
                     <td><a :href="'https://tw.stock.yahoo.com/quote/'+record.stock_code" target="_blank" rel="noopener noreferrer">{{record.stock_code}}</a></td>
                     <td v-bind:class="{'text-success': record.last - record.target_price < 0}">{{record.last}}</td>
                     <td>{{record.target_price}}</td>
-                    <td>{{record.timestamp}}</td>
+                    <td>{{record.timestamp*1000|dateFormat}}</td>
                   </tr>
                 </tbody>
               </table>

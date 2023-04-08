@@ -13,13 +13,19 @@ var app = new Vue({
     methods: {
 
     },
+    filters: {
+        dateFormat: function(value) {
+            let result =  new Date(value).toString("yyyy/MM/dd");
+            return result;
+        }
+    },
     mounted: function(){
         // item & realm data initial 
         axios.get(`https://invest-8738f-default-rtdb.firebaseio.com/tw-stock/bt.json`).then(function(res){
             this.BackTradeRecords = res.data.sort( (a,b) => b.irr - a.irr);
         }.bind(this));        
         axios.get(`https://invest-8738f-default-rtdb.firebaseio.com/tw-stock/target_prices.json`).then(function(res){
-            this.TargetPrices = res.data.sort((a,b)=>a.last - a.target_price);
+            this.TargetPrices = res.data.sort((a,b)=>(a.last - a.target_price)/a.last - (b.last - b.target_price)/b.last);
         }.bind(this));
         
     },
