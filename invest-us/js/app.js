@@ -3,6 +3,7 @@ var app = new Vue({
     data: {
         TargetPrices:[],
         BackTradeRecords:[],
+        StockLogs:{},
         Select:{
             ItemName: 'BackTradeRecords'
 
@@ -11,7 +12,11 @@ var app = new Vue({
         NoticeMsg:'',
     },
     methods: {
-
+        getStockLogs: function(stock_code) {            
+            axios.get(`https://invest-8738f-default-rtdb.firebaseio.com/us-stock/logs/${stock_code}.json`).then(function(res){
+                Vue.set(this.StockLogs, stock_code, res.data);                
+            }.bind(this)); 
+        }
     },
     filters: {
         dateFormat: function(value) {

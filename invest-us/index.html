@@ -29,54 +29,75 @@
         <div v-if="Select.ItemName == 'BackTradeRecords'">
             <h2>模擬條件</h2>
             <ul>
-                <li>起始現金1萬</li>
-                <li>交易稅率設為0</li>
-                <li>每次交易至少10單位</li>
-                <li>每次交易間隔2天以上</li>
-                <li>買進條件
-                    <ul>
-                        <li>當RSI低於30時</li>
-                        <li>進場價：從起始日，每當 RSI 12 低於 30 時記錄一次市價，取五次市價的平均。</li>
-                        <li>當開盤價 小於等於 「近5次RSI 12低於 30 的平均市價」時購入。未持股情況下，首次購入20股</li>
-                        <li>市價於庫存價差的正負3%以內時，加碼10股</li>
-                        <li>市價低於庫存價差5%時，加碼20股</li>
-                    </ul>
-                </li>
-                <li>賣出條件
-                    <ul>
-                        <li>當RSI高於70時</li>
-                        <li>開盤價與庫存價差25%時賣出10股</li>
-                        <li>開盤價與庫存價差50%時賣出20股</li>
-                    </ul>
-                </li>
-            </ul>
+              <li>起始現金1萬</li>
+              <li>交易稅率設為0</li>
+              <li>每次交易至少10單位</li>
+              <li>每次交易間隔2天以上</li>
+              <li>買進條件
+                  <ul>
+                      <li>當RSI低於 30 時</li>
+                      <li>進場價：從起始日，每當 RSI 12 低於 30 時記錄一次市價，取五次市價的平均。</li>
+                      <li>當開盤價 小於等於 「近5次RSI 12 低於 30 的平均市價」時購入。未持股情況下，首次購入20股</li>
+                      <li>市價於庫存價差的正負3%以內時，加碼10股</li>
+                      <li>市價低於庫存價差5%時，加碼20股</li>
+                  </ul>
+              </li>
+              <li>賣出條件
+                  <ul>
+                      <li>當RSI高於80時</li>
+                      <li>開盤價與庫存價差25%時賣出10股</li>
+                      <li>開盤價與庫存價差50%時賣出20股</li>
+                  </ul>
+              </li>
+          </ul>
             <table class="table">
-                <thead>
-                  <tr>
-                    <th>代號</th>
-                    <th>持股</th>
-                    <th>股票現值</th>
-                    <th>現金</th>
-                    <th>配息</th>                
-                    <th>IRR</th>
-                    <th>ROI</th>
-                    <th>回測時間</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- reverse sort by date -->
-                  <tr v-for="record in BackTradeRecords">
-                    <td><a :href="'https://finance.yahoo.com/chart/'+record.stock_code" target="_blank" rel="noopener noreferrer">{{record.stock_code}}</a></td>
-                    <td>{{record.size}}</td>
-                    <td>{{record.value}}</td>
-                    <td>{{record.cash}}</td>
-                    <td>{{record.div_cash}}</td>                
-                    <td v-bind:class="{'text-success': record.irr >= 0.1}">{{record.irr}}</td>
-                    <td>{{record.roi}}</td>
-                    <td>{{record.start_date}} ~ {{record.end_date}}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <thead>
+                <tr>
+                  <th>代號</th>  
+                  <th>IRR</th>
+                  <th>ROI</th>
+                  <th>BT</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="record in BackTradeRecords">
+                  <td><a :href="'https://finance.yahoo.com/chart/'+record.stock_code" target="_blank" rel="noopener noreferrer">{{record.stock_code}}</a></td>
+                  <td v-bind:class="{'text-success': record.irr >= 0.1}">{{Math.round(record.irr*10000)/100}}%</td>
+                  <td>{{Math.round(record.roi*10000)/100}}%</td>
+                  <td><button @click.self="getStockLogs(record.stock_code)">查看</button>
+                    <div>
+                      <table class="table">
+                        <tr>
+                          <th>Date</th>
+                          <th>Action</th>
+                          <th>TradePrice</th>
+                          <th>TradeSize</th>
+                          <th>PositionSize</th>
+                          <th>PositionPrice</th>                    
+                          <th>Value</th>
+                          <th>Cash</th>
+                          <th>RSI</th>
+                        </tr>
+                        <tr v-for="row in StockLogs[record.stock_code]">
+                          <td>{{row.datetime}}</td>
+                          <td v-bind:class="{
+                            'text-success': row.action == 'Sell',
+                            'text-danger': row.action == 'Buy'
+                          }">{{row.action}}</td>
+                          <td>{{row.price}}</td>
+                          <td>{{row.size}}</td>
+                          <td>{{row.position_size}}</td>
+                          <td>{{row.position_price}}</td>                     
+                          <td>{{row.value}}</td>
+                          <td>{{row.cash}}</td>
+                          <td>{{row.rsi}}</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
         </div>
         <div v-if="Select.ItemName == 'TargetPrice'">
             <ul>
