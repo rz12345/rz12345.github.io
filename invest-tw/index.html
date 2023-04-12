@@ -52,35 +52,17 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th>代號</th>
-                  <!--
-                  <th>持股</th>
-                  <th>股票現值</th>
-                  <th>現金</th>
-                  <th>配息</th>
-                  -->          
+                  <th>代號</th>  
                   <th>IRR</th>
                   <th>ROI</th>
-                  <!--
-                  <th>回測時間</th>
-                  -->
                   <th>BT</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="record in BackTradeRecords">
                   <td><a :href="'https://tw.stock.yahoo.com/quote/'+record.stock_code" target="_blank" rel="noopener noreferrer">{{record.stock_code}}</a></td>
-                  <!--
-                  <td>{{record.size}}</td>
-                  <td>{{record.value}}</td>
-                  <td>{{record.cash}}</td>
-                  <td>{{record.div_cash}}</td>   
-                  -->              
                   <td v-bind:class="{'text-success': record.irr >= 0.1}">{{Math.round(record.irr*10000)/100}}%</td>
                   <td>{{Math.round(record.roi*10000)/100}}%</td>
-                  <!--
-                  <td>{{record.start_date}} ~ <br>{{record.end_date}}</td>
-                  -->
                   <td><button @click.self="getStockLogs(record.stock_code)">查看</button>
                     <div>
                       <table class="table">
@@ -104,8 +86,7 @@
                           <td>{{row.price}}</td>
                           <td>{{row.size}}</td>
                           <td>{{row.position_size}}</td>
-                          <td>{{row.position_price}}</td>
-                          <!--<td>{{row.value/row.position_size}}</td>-->                        
+                          <td>{{row.position_price}}</td>                     
                           <td>{{row.value}}</td>
                           <td>{{row.cash}}</td>
                           <td>{{row.rsi}}</td>
