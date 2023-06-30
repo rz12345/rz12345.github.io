@@ -66,11 +66,11 @@ const app = new Vue({
     },
     mounted: function () {
         // item data initial 
-        axios.get(`https://wow-auction-7d35e-default-rtdb.firebaseio.com/item_focus_list.json`).then(function (res) {
+        axios.get(`https://jojocat-poc-default-rtdb.firebaseio.com/wow/item_focus_list.json`).then(function (res) {
             //this.Items = res.data;
             this.Items = Object.values(res.data);            
         }.bind(this));
-        axios.get(`https://wow-auction-7d35e-default-rtdb.firebaseio.com/item_class.json`).then(function (res) {
+        axios.get(`https://jojocat-poc-default-rtdb.firebaseio.com/wow/item_class.json`).then(function (res) {
             this.ItemClasses = res.data;
         }.bind(this));
 

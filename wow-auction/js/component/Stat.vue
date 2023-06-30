@@ -66,7 +66,7 @@ module.exports = {
         fetchAuctionData(item_id) {
             this.FetchComplete = false;
             this.AuctionRecords = []; // 清空一次
-            axios.get(`https://wow-auction-7d35e-default-rtdb.firebaseio.com/auction/${item_id}.json`).then(function (res) {
+            axios.get(`https://jojocat-poc-default-rtdb.firebaseio.com/wow/auction/${item_id}.json`).then(function (res) {
                 if (res.data != null) {
                     this.AuctionRecords = res.data;
                     this.NoticeMsg = '';
@@ -78,7 +78,7 @@ module.exports = {
             }.bind(this));
         },
         fetchItemInfo(item_id) {
-            axios.get(`https://wow-auction-7d35e-default-rtdb.firebaseio.com/item_focus_list/${item_id}.json`).then(function (res) {
+            axios.get(`https://jojocat-poc-default-rtdb.firebaseio.com/wow/item_focus_list/${item_id}.json`).then(function (res) {
                 this.ItemName = res.data.name;
                 this.ItemClassName = res.data.item_class_name;
                 this.ItemSubClassName = res.data.item_subclass_name;
