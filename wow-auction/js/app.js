@@ -1,4 +1,6 @@
 const ComponentBasePath = './js/component';
+const prefixURL = 'https://jojocat-wow-f72a5-default-rtdb.asia-southeast1.firebasedatabase.app';
+//const prefixURL = 'https://jojocat-poc-default-rtdb.firebaseio.com/';
 
 const routes = [
     
@@ -66,11 +68,11 @@ const app = new Vue({
     },
     mounted: function () {
         // item data initial 
-        axios.get(`https://jojocat-poc-default-rtdb.firebaseio.com/wow/item_focus_list.json`).then(function (res) {
+        axios.get(prefixURL+`/wow/item_focus_list.json`).then(function (res) {
             //this.Items = res.data;
             this.Items = Object.values(res.data);            
         }.bind(this));
-        axios.get(`https://jojocat-poc-default-rtdb.firebaseio.com/wow/item_class.json`).then(function (res) {
+        axios.get(prefixURL+`/wow/item_class.json`).then(function (res) {
             this.ItemClasses = res.data;
         }.bind(this));
 

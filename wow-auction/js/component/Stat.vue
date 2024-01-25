@@ -35,8 +35,8 @@
                 </thead>
                 <tbody>
                     <!-- reverse sort by date -->
-                    <tr v-for="record in PriceRecords.sort((a, b) => new Date(b.datetime) - new Date(a.datetime))">
-                        <td>{{ dayjs(record.datetime).format("YYYY-MM-DD (ddd)") }}</td>
+                    <tr v-for="record in PriceRecords.sort((a, b) => new Date(b.date) - new Date(a.date))">
+                        <td>{{ record.date }}</td>
                         <td>{{ convertPrice(record.min) }}</td>
                         <td>{{ convertPrice(record.max) }}</td>
                         <td>{{ convertPrice(record.median) }}</td>
@@ -49,6 +49,8 @@
 </template>
 
 <script>
+const prefixURL = 'https://jojocat-wow-f72a5-default-rtdb.asia-southeast1.firebasedatabase.app';
+//const prefixURL = 'https://jojocat-poc-default-rtdb.firebaseio.com/';
 module.exports = {
     data: function () {
         return {
@@ -66,9 +68,21 @@ module.exports = {
         fetchAuctionData(item_id) {
             this.FetchComplete = false;
             this.AuctionRecords = []; // 清空一次
-            axios.get(`https://jojocat-poc-default-rtdb.firebaseio.com/wow/auction/${item_id}.json`).then(function (res) {
+            //const url = ;
+            //const url = `https://jojocat-poc-default-rtdb.firebaseio.com/wow/auction/${item_id}.json`
+            axios.get(prefixURL + `/wow/auction_realtime/${item_id}.json`).then(function (res) {                
                 if (res.data != null) {
-                    this.AuctionRecords = res.data;
+                    this.AuctionRecords = this.AuctionRecords.concat(res.data);
+                    this.NoticeMsg = '';
+                } else {
+                    this.NoticeMsg = '查無紀錄';
+                }
+                this.FetchComplete = true;
+                //this.updateChart();
+            }.bind(this));
+            axios.get(prefixURL + `/wow/auction/${item_id}.json`).then(function (res) {                
+                if (res.data != null) {
+                    this.AuctionRecords = this.AuctionRecords.concat(res.data);
                     this.NoticeMsg = '';
                 } else {
                     this.NoticeMsg = '查無紀錄';
@@ -77,8 +91,12 @@ module.exports = {
                 //this.updateChart();
             }.bind(this));
         },
+        /**
+         * 用於透過 params 載入頁面時，讀取 item 資訊
+         * @param {*} item_id 
+         */
         fetchItemInfo(item_id) {
-            axios.get(`https://jojocat-poc-default-rtdb.firebaseio.com/wow/item_focus_list/${item_id}.json`).then(function (res) {
+            axios.get(prefixURL+`/wow/item_focus_list/${item_id}.json`).then(function (res) {
                 this.ItemName = res.data.name;
                 this.ItemClassName = res.data.item_class_name;
                 this.ItemSubClassName = res.data.item_subclass_name;
@@ -144,7 +162,7 @@ module.exports = {
             this.LiveChart = live_chart;
         },
         updateChart() {
-            this.LiveChart.data.labels = this.PriceRecords.map(record => dayjs(record.datetime).format("MM-DD"));
+            this.LiveChart.data.labels = this.PriceRecords.map(record => dayjs(record.date).format("MM-DD"));
             this.LiveChart.data.datasets = [{
                 type: 'line',
                 label: 'min',
@@ -195,7 +213,8 @@ module.exports = {
             }
         },
         PriceRecords: function () {
-            return this.AuctionRecords.filter(record => record.item_id == this.$route.params.Item && record.qty != 0);
+            return this.AuctionRecords.filter(record => record.qty != 0);
+            //return this.AuctionRecords.filter(record => record.item_id == this.$route.params.Item && record.qty != 0);
         },
     },
     watch: {
