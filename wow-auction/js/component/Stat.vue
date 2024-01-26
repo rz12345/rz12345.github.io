@@ -68,8 +68,7 @@ module.exports = {
         fetchAuctionData(item_id) {
             this.FetchComplete = false;
             this.AuctionRecords = []; // 清空一次
-            //const url = ;
-            //const url = `https://jojocat-poc-default-rtdb.firebaseio.com/wow/auction/${item_id}.json`
+            // 即時的 auction 資料(4小時更新一次)
             axios.get(prefixURL + `/wow/auction_realtime/${item_id}.json`).then(function (res) {                
                 if (res.data != null) {
                     this.AuctionRecords = this.AuctionRecords.concat(res.data);
@@ -80,6 +79,7 @@ module.exports = {
                 this.FetchComplete = true;
                 //this.updateChart();
             }.bind(this));
+            // 過去28天的 auction 資料
             axios.get(prefixURL + `/wow/auction/${item_id}.json`).then(function (res) {                
                 if (res.data != null) {
                     this.AuctionRecords = this.AuctionRecords.concat(res.data);
