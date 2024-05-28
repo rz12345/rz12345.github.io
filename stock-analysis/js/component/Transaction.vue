@@ -1,6 +1,8 @@
 <template>
     <div>
         <h2><router-link :to="{name:'home'}" >首頁</router-link> / {{this.$route.params.Market.toUpperCase()}} /  {{this.$route.params.StockId}} 交易紀錄</h2>
+            <!-- Chart -->
+            <canvas id="myChart"></canvas>
           <table class="table">
             <thead>
                 <tr>
@@ -37,17 +39,67 @@ const prefixURL = 'https://jojocat-stock-analysis-default-rtdb.asia-southeast1.f
 module.exports = {
     data: function () {
         return {
+            LiveChart:'',
             transaction_logs: [],
         }
     },
     props: ['Market', 'StockId'],
     methods: {
+        drawChart() {
+            let ctx = document.getElementById('myChart');
+            let live_chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: '',
+                        data: [],
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        },
+                    }
+                }
+            });
+            this.LiveChart = live_chart;
+        },
+        updateChart() { // transaction_logs
+            this.LiveChart.data.labels = this.transaction_logs.map(record => dayjs(record.date).format("YY-MM-DD"));
+            this.LiveChart.data.datasets = [{
+                type: 'line',
+                label: '持倉價值',
+                data: this.transaction_logs.map(record => record.position_value),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                //yAxisID: 'y',
+            },
+            {
+                type: 'line',
+                label: '資產價值',
+                data: this.transaction_logs.map(record => record.asset_value),
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                //yAxisID: 'y',
+            },
+            ];
+            this.LiveChart.update();
+        },
 
     },
     mounted: function () {
-        // /tw/best_transaction_logs/0050.json
+        this.drawChart();
+
         axios.get(prefixURL+`/${this.$route.params.Market}/best_transaction_logs/${this.$route.params.StockId}.json`).then(function (res) {
-            this.transaction_logs = Object.values(res.data);            
+            this.transaction_logs = Object.values(res.data);
+            this.updateChart();
         }.bind(this));
     },
     computed: {
