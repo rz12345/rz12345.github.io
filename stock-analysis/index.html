@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      rel="stylesheet" type="text/css" />
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="css/app.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js"
+      integrity="sha512-BKbSR+cfyxLdMAsE0naLReFSLg8/pjbgfxHh/k/kUC82Hy7r6HtR5hLhobaln2gcTvzkyyehrdREdjpsQwy2Jw=="
+      crossorigin="anonymous"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.4.3/vue-router.min.js"
+      integrity="sha512-mVyZZ423iwLddhRdWCJeQSysHfnDZZPJRlY9HJI6/39e6D8Myz3nQCelJmSMOf8MOreTzWDmh8bYftrBnTau1Q=="
+      crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.2/src/httpVueLoader.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"
+      integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg=="
+      crossorigin="anonymous"></script>
+    <!--
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"
+      integrity="sha256-qoN08nWXsFH+S9CtIq99e5yzYHioRHtNB9t2qy1MSmc="
+      crossorigin="anonymous"></script>
+    -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TJWWQVVMP3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-TJWWQVVMP3');
+</script>
+    <title>小貓選股</title>
+  </head>
+  <body>
+    <div id="app" class="container">
+      <div class="jumbotron">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <span class="nav-link" style="font-size: 24px; color: Dodgerblue;">
+              <i class="fas fa-cat"></i> 小貓選股</span> 
+          </li>
+          <!-- 2024/5 搜尋功能未開放 -->
+          <li class="nav-item ml-auto d-none">
+            <span class="nav-link" style="font-size: 18px;">
+              <i class="fas fa-search"></i> <input type="text" style="margin-left: 5px;">
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <router-view></router-view>          
+        </div>
+      </div>      
+    </div>
+    <script src="js/app.js"></script>
+  </body>
+
+</html>
