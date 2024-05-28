@@ -66,8 +66,26 @@ module.exports = {
                                 beginAtZero: true
                             }
                         },
-                    }
-                }
+                    },
+                    plugins: {
+                        datalabels: {
+                        color: 'black',
+                        font: {weight: 'bold'},
+                        anchor: 'center',    //錨點放在中間
+                        align: 'end',      //對齊尾端
+                        offset: 8,             //往中間遠離8px
+                        formatter: function(value, context) {
+                            if (context.dataIndex === context.dataset.data.length - 1) {
+                                return value;
+                            } else {
+                                return '';
+                            }
+                            }
+                        }
+                    },
+                },
+                plugins: [ChartDataLabels],
+                
             });
             this.LiveChart = live_chart;
         },
