@@ -7,10 +7,24 @@ const routes = [
         component: httpVueLoader(`${ComponentBasePath}/Transaction.vue`),
     },
     {
+        name: 'tw',
+        path: '/:Market',
+        component: httpVueLoader(`${ComponentBasePath}/TW.vue`),
+    },
+    {
+        name: 'us',
+        path: '/:Market',
+        component: httpVueLoader(`${ComponentBasePath}/US.vue`),
+    },
+    {
+        name: 'about',
+        path: '/about',
+        component: httpVueLoader(`${ComponentBasePath}/About.vue`),
+    },
+    {
         name: 'home',
         path: '/',
-        component: httpVueLoader(`${ComponentBasePath}/Home.vue`),
-        //props: true
+        component: httpVueLoader(`${ComponentBasePath}/TW.vue`),
     },
 ];
 
