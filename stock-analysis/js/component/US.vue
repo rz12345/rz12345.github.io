@@ -1,6 +1,6 @@
 <!-- USStockSummary.vue -->
 <template>
-  <shared-stock-summary market="us" title="美股回測"></shared-stock-summary>
+  <shared-stock-summary market="us" title="美股回測模擬"></shared-stock-summary>
 </template>
 
 <script>

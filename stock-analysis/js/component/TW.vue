@@ -1,6 +1,6 @@
 <!-- TaiwanStockSummary.vue -->
 <template>
-  <shared-stock-summary market="tw" title="台股回測"></shared-stock-summary>
+  <shared-stock-summary market="tw" title="台股回測模擬"></shared-stock-summary>
 </template>
 
 <script>
