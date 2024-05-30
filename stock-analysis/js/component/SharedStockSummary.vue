@@ -1,90 +1,100 @@
 <!-- SharedStockSummary.vue -->
 <template>
-    <div>
-      <h2>{{ title }}回測模擬成效</h2>
-      <div v-if="recent_transaction_logs.length > 0">
-        <h3>近期交易紀錄</h3>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>代號</th>
-              <th>日期</th>
-              <th>方法</th>
-              <th>收盤價</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="record in recent_transaction_logs.slice().sort((a, b) => b.irr - a.irr)">
-              <td>
-                <router-link :to="{
-                  name: 'transaction',
-                  params: {
-                    Market: $route.params.Market,
-                    StockId: record.stock_id,
-                  }
-                }">
-                  {{ record.stock_id }}
-                </router-link>
-              </td>
-              <td>{{ record.date }}</td>
-              <td>{{ record.method }}</td>
-              <td>{{ record.date_closed_price }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div v-if="summaries.length > 0">
-        <h3>標的投報率</h3>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>代號</th>
-              <th>日期</th>
-              <th>方法</th>
-              <th>收盤價</th>
-              <th>持倉價值</th>
-              <th>期間配息</th>
-              <th>資產價值</th>
-              <th>投報率</th>
-              <th>年化報酬率</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- reverse sort by date -->
-            <tr v-for="record in summaries.slice().sort((a, b) => b.irr - a.irr)">
-              <td>
-                <router-link :to="{
-                  name: 'transaction',
-                  params: {
-                    Market: $route.params.Market,
-                    StockId: record.stock_id,
-                  }
-                }">
-                  {{ record.stock_id }}
-                </router-link>
-              </td>
-              <td>{{ record.date }}</td>
-              <td>{{ record.method }}</td>
-              <td>{{ record.close }}</td>
-              <td>{{ record.position_value }}</td>
-              <td>{{ record.broker_dividend }}</td>
-              <td>{{ record.asset_value }}</td>
-              <td>{{ convertRate(record.roi) }}</td>
-              <td>{{ convertRate(record.irr) }}</td>
-            </tr>
-          </tbody>
-        </table>
+  <div>
+    <h2>{{ title }}</h2>
+    <div v-if="recent_transaction_logs.length > 0">
+      <h3>近期交易紀錄</h3>
+      <div class="row">
+        <div class="col-md-4" v-for="record in recent_transaction_logs.slice().sort((a, b) => b.irr - a.irr)">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <h5 class="card-title mb-0">
+                  <router-link :to="{
+                    name: 'transaction',
+                    params: {
+                      Market: $route.params.Market,
+                      StockId: record.stock_id,
+                    }
+                  }">
+                    {{ record.stock_id }}
+                  </router-link>
+                </h5>
+                <small class="text-muted text-right">
+                  {{ record.date }}<br/>
+                  收盤價 {{ record.date_closed_price }}
+                </small>
+              </div>
+              <div class="d-flex justify-content-end mt-4">
+                <small class="text-muted">方法 {{ record.method }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </template>
+    <div v-if="summaries.length > 0">
+      <h3>標的投報率</h3>
+      <div class="mb-3">
+        <button class="btn btn-secondary mr-2" @click="sortBy('irr')">年化報酬率 <i class="fas fa-sort-down"></i></button>
+        <button class="btn btn-secondary mr-2" @click="sortBy('roi')">投報率 <i class="fas fa-sort-down"></i></button>
+        <button class="btn btn-secondary mr-2" @click="sortBy('asset_value')">資產價值 <i class="fas fa-sort-down"></i></button>
+        <button class="btn btn-secondary mr-2" @click="sortBy('position_value')">持倉價值 <i class="fas fa-sort-down"></i></button>
+        <button class="btn btn-secondary" @click="sortBy('broker_dividend')">期間配息 <i class="fas fa-sort-down"></i></button>
+      </div>
+      <div class="row">
+        <div class="col-md-4" v-for="record in sortedSummaries">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <h5 class="card-title mb-0">
+                  <router-link :to="{
+                    name: 'transaction',
+                    params: {
+                      Market: $route.params.Market,
+                      StockId: record.stock_id,
+                    }
+                  }">
+                    {{ record.stock_id }}
+                  </router-link>
+                </h5>
+                <small class="text-muted text-right">
+                  {{ record.date }}<br/>
+                  收盤價 {{ record.close }}
+                </small>
+              </div>
+              <div class="row mt-4">
+                <div class="col-6">年化報酬率</div>
+                <div class="col-6 text-success text-right">{{ convertRate(record.irr) }}</div>
+                <div class="col-6">投報率</div>
+                <div class="col-6 text-success text-right">{{ convertRate(record.roi) }}</div>
+                <div class="col-6">資產價值</div>
+                <div class="col-6 text-success text-right">{{ record.asset_value }}</div>
+                <div class="col-6">持倉價值</div>
+                <div class="col-6 text-success text-right">{{ record.position_value }}</div>
+                <div class="col-6">期間配息</div>
+                <div class="col-6 text-success text-right">{{ record.broker_dividend }}</div>
+              </div>
+              <div class="d-flex justify-content-end mt-4">
+                <small class="text-muted">方法 {{ record.method }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ </template>
   
   <script>
+
   module.exports = {
     props: ['title'],
     data: function() {
       return {
         summaries: [],
         recent_transaction_logs: [],
+        sortKey: 'irr' // 默認按年化報酬率排序
       }
     },
     methods: {
@@ -94,12 +104,20 @@
       },
       getData() {
         axios.get(`${prefixURL}${this.$route.params.Market}/best_bt_summaries.json`).then(function(res) {
-        this.summaries = Object.values(res.data);
-      }.bind(this));
-      axios.get(`${prefixURL}${this.$route.params.Market}/recent_transaction_logs.json`).then(function(res) {
-        this.recent_transaction_logs = Object.values(res.data);
-      }.bind(this));
+          this.summaries = Object.values(res.data);
+        }.bind(this));
+        axios.get(`${prefixURL}${this.$route.params.Market}/recent_transaction_logs.json`).then(function(res) {
+          this.recent_transaction_logs = Object.values(res.data);
+        }.bind(this));
       },
+      sortBy(key) {
+        this.sortKey = key;
+      },
+    },
+    computed: {
+      sortedSummaries: function () {
+            return this.summaries.slice().sort((a, b) => b[this.sortKey] - a[this.sortKey]);
+        },
     },
     mounted: function() {
       this.getData()

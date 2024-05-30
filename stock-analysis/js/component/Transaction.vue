@@ -1,7 +1,9 @@
 <template>
     <div>
         <h2>
-            {{ title }}回測模擬成效 /
+            <router-link class="p-2 text-dark" :to="{
+                params:{Market:'tw'},
+                name:'market'}">{{ title }}</router-link> /
             {{this.$route.params.StockId}}
         </h2>
             <!-- Chart -->
