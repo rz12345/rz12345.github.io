@@ -49,16 +49,3 @@
     </div>
   </div>
 </template>
-
-<script>
-  module.exports = {
-    data: function() {
-      return {
-      }
-    },
-    methods: {
-    },
-    mounted: function() {
-    },
-  }
-</script>
