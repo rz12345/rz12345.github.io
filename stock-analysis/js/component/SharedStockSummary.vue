@@ -1,7 +1,7 @@
 <!-- SharedStockSummary.vue -->
 <template>
     <div>
-      <h2>{{ title }}</h2>
+      <h2>{{ title }}回測模擬成效</h2>
       <div v-if="recent_transaction_logs.length > 0">
         <h3>近期交易紀錄</h3>
         <table class="table">
@@ -17,8 +17,14 @@
             <tr v-for="record in recent_transaction_logs.slice().sort((a, b) => b.irr - a.irr)">
               <td>
                 <router-link :to="{
-                params:{Market:'tw',StockId:record.stock_id},
-                name:'transaction'}">{{ record.stock_id }}</router-link>
+                  name: 'transaction',
+                  params: {
+                    Market: $route.params.Market,
+                    StockId: record.stock_id,
+                  }
+                }">
+                  {{ record.stock_id }}
+                </router-link>
               </td>
               <td>{{ record.date }}</td>
               <td>{{ record.method }}</td>
@@ -48,8 +54,14 @@
             <tr v-for="record in summaries.slice().sort((a, b) => b.irr - a.irr)">
               <td>
                 <router-link :to="{
-                params:{Market:'tw',StockId:record.stock_id},
-                name:'transaction'}">{{ record.stock_id }}</router-link>
+                  name: 'transaction',
+                  params: {
+                    Market: $route.params.Market,
+                    StockId: record.stock_id,
+                  }
+                }">
+                  {{ record.stock_id }}
+                </router-link>
               </td>
               <td>{{ record.date }}</td>
               <td>{{ record.method }}</td>
@@ -68,7 +80,7 @@
   
   <script>
   module.exports = {
-    props: ['market', 'title'],
+    props: ['title'],
     data: function() {
       return {
         summaries: [],
@@ -80,14 +92,24 @@
         let rate = parseInt(real * 10000) / 100;
         return `${rate} %`;
       },
-    },
-    mounted: function() {
-      axios.get(`${prefixURL}/${this.market}/best_bt_summaries.json`).then(function(res) {
+      getData() {
+        axios.get(`${prefixURL}${this.$route.params.Market}/best_bt_summaries.json`).then(function(res) {
         this.summaries = Object.values(res.data);
       }.bind(this));
-      axios.get(`${prefixURL}/${this.market}/recent_transaction_logs.json`).then(function(res) {
+      axios.get(`${prefixURL}${this.$route.params.Market}/recent_transaction_logs.json`).then(function(res) {
         this.recent_transaction_logs = Object.values(res.data);
       }.bind(this));
+      },
     },
+    mounted: function() {
+      this.getData()
+    },
+    watch: {
+        $route(to, from) {
+          this.getData()
+        },
+        //deep: true,
+        immediate: true,
+    }
   }
   </script>

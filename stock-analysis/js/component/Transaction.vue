@@ -1,6 +1,9 @@
 <template>
     <div>
-        <h2><router-link :to="{name:'home'}" >首頁</router-link> / {{this.$route.params.Market.toUpperCase()}} /  {{this.$route.params.StockId}} 交易紀錄</h2>
+        <h2>
+            {{ title }}回測模擬成效 /
+            {{this.$route.params.StockId}}
+        </h2>
             <!-- Chart -->
             <canvas id="myChart"></canvas>
           <table class="table">
@@ -37,13 +40,13 @@
 <script>
 const prefixURL = 'https://jojocat-stock-analysis-default-rtdb.asia-southeast1.firebasedatabase.app/';
 module.exports = {
+    props: ['title'],
     data: function () {
         return {
             LiveChart:'',
             transaction_logs: [],
         }
     },
-    props: ['Market', 'StockId'],
     methods: {
         drawChart() {
             let ctx = document.getElementById('myChart');
@@ -115,7 +118,7 @@ module.exports = {
     mounted: function () {
         this.drawChart();
 
-        axios.get(prefixURL+`/${this.$route.params.Market}/best_transaction_logs/${this.$route.params.StockId}.json`).then(function (res) {
+        axios.get(prefixURL+`${this.$route.params.Market}/best_transaction_logs/${this.$route.params.StockId}.json`).then(function (res) {
             this.transaction_logs = Object.values(res.data);
             this.updateChart();
         }.bind(this));

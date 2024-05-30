@@ -4,17 +4,18 @@ const routes = [
     {
         name: 'transaction',
         path: '/:Market/:StockId',
-        component: httpVueLoader(`${ComponentBasePath}/Transaction.vue`),
+        component: httpVueLoader(`${ComponentBasePath}/Transaction.vue`),        
+        props: route => ({
+            title: route.params.Market === 'tw' ? '台股' : route.params.Market === 'us' ? '美股' : ''
+        }),
     },
     {
-        name: 'tw',
+        name: 'market',
         path: '/:Market',
-        component: httpVueLoader(`${ComponentBasePath}/TW.vue`),
-    },
-    {
-        name: 'us',
-        path: '/:Market',
-        component: httpVueLoader(`${ComponentBasePath}/US.vue`),
+        component: httpVueLoader(`${ComponentBasePath}/SharedStockSummary.vue`),
+        props: route => ({
+            title: route.params.Market === 'tw' ? '台股' : route.params.Market === 'us' ? '美股' : ''
+        }),
     },
     {
         name: 'about',
@@ -24,7 +25,7 @@ const routes = [
     {
         name: 'home',
         path: '/',
-        component: httpVueLoader(`${ComponentBasePath}/TW.vue`),
+        redirect: { name: 'market', params: { Market: 'tw' } },
     },
 ];
 
