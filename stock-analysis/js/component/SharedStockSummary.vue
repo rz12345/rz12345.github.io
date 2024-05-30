@@ -5,7 +5,7 @@
     <div v-if="recent_transaction_logs.length > 0">
       <h3>近期交易紀錄</h3>
       <div class="row">
-        <div class="col-md-4" v-for="record in recent_transaction_logs.slice().sort((a, b) => b.irr - a.irr)">
+        <div class="col-md-4 col-sm-6" v-for="record in recent_transaction_logs.slice().sort((a, b) => b.irr - a.irr)">
           <div class="card mb-4">
             <div class="card-body">
               <div class="d-flex justify-content-between">
@@ -43,7 +43,7 @@
         <button class="btn btn-secondary" @click="sortBy('broker_dividend')">期間配息 <i class="fas fa-sort-down"></i></button>
       </div>
       <div class="row">
-        <div class="col-md-4" v-for="record in sortedSummaries">
+        <div class="col-md-4 col-sm-6" v-for="record in sortedSummaries">
           <div class="card mb-4">
             <div class="card-body">
               <div class="d-flex justify-content-between">
