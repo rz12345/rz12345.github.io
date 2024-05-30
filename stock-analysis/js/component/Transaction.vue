@@ -3,39 +3,47 @@
         <h2>
             <router-link class="p-2 text-dark" :to="{
                 params:{Market:'tw'},
-                name:'market'}">{{ title }}</router-link> /
-            {{this.$route.params.StockId}}
+                name:'market'}">{{ title }}</router-link> / {{this.$route.params.StockId}}
         </h2>
-            <!-- Chart -->
-            <canvas id="myChart"></canvas>
-          <table class="table">
-            <thead>
-                <tr>
-                    <th>代號</th>
-                    <th>日期</th>
-                    <th>方法</th>
-                    <th>持倉數</th>
-                    <th>持倉價格</th>
-                    <th>持倉價值</th>
-                    <th>當日收盤價</th>
-                    <th>期間配息</th>
-                    <th>資產價值</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="record in transaction_logs">
-                    <td>{{ record.stock_id }}</td>
-                    <td>{{ record.date }}</td>
-                    <td>{{ record.method }}</td>
-                    <td>{{ record.position_size }}</td>
-                    <td>{{ record.position_price }}</td>
-                    <td>{{ record.position_value }}</td>
-                    <td>{{ record.date_closed_price }}</td>
-                    <td>{{ record.broker_dividend }}</td>
-                    <td>{{ record.asset_value }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>代號</th>
+                                <th>日期</th>
+                                <th>方法</th>
+                                <th>持倉數</th>
+                                <th>持倉價格</th>
+                                <th>持倉價值</th>
+                                <th>當日收盤價</th>
+                                <th>期間配息</th>
+                                <th>資產價值</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="record in transaction_logs">
+                                <td>{{ record.stock_id }}</td>
+                                <td>{{ record.date }}</td>
+                                <td>{{ record.method }}</td>
+                                <td>{{ record.position_size }}</td>
+                                <td>{{ formatCurrency(record.position_price) }}</td>
+                                <td>{{ formatCurrency(record.position_value) }}</td>
+                                <td>{{ formatCurrency(record.date_closed_price) }}</td>
+                                <td>{{ formatCurrency(record.broker_dividend) }}</td>
+                                <td>{{ formatCurrency(record.asset_value) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -114,6 +122,10 @@ module.exports = {
             },
             ];
             this.LiveChart.update();
+        },
+        formatCurrency(value) {
+            const currency = this.$route.params.Market === 'tw' ? 'NT$' : 'USD$';
+            return `${currency} ${value}`;
         },
 
     },

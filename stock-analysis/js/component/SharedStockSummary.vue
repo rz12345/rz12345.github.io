@@ -22,7 +22,7 @@
                 </h5>
                 <small class="text-muted text-right">
                   {{ record.date }}<br/>
-                  收盤價 {{ record.date_closed_price }}
+                  收盤價 {{ formatCurrency(record.date_closed_price) }}
                 </small>
               </div>
               <div class="d-flex justify-content-end mt-4">
@@ -60,7 +60,7 @@
                 </h5>
                 <small class="text-muted text-right">
                   {{ record.date }}<br/>
-                  收盤價 {{ record.close }}
+                  收盤價 {{ formatCurrency(record.close) }}
                 </small>
               </div>
               <div class="row mt-4">
@@ -69,11 +69,11 @@
                 <div class="col-6">投報率</div>
                 <div class="col-6 text-success text-right">{{ convertRate(record.roi) }}</div>
                 <div class="col-6">資產價值</div>
-                <div class="col-6 text-success text-right">{{ record.asset_value }}</div>
+                <div class="col-6 text-success text-right">{{ formatCurrency(record.asset_value) }}</div>
                 <div class="col-6">持倉價值</div>
-                <div class="col-6 text-success text-right">{{ record.position_value }}</div>
+                <div class="col-6 text-success text-right">{{ formatCurrency(record.position_value) }}</div>
                 <div class="col-6">期間配息</div>
-                <div class="col-6 text-success text-right">{{ record.broker_dividend }}</div>
+                <div class="col-6 text-success text-right">{{ formatCurrency(record.broker_dividend) }}</div>
               </div>
               <div class="d-flex justify-content-end mt-4">
                 <small class="text-muted">方法 {{ record.method }}</small>
@@ -112,6 +112,10 @@
       },
       sortBy(key) {
         this.sortKey = key;
+      },
+      formatCurrency(value) {
+        const currency = this.$route.params.Market === 'tw' ? 'NT$' : 'USD$';
+        return `${currency} ${value}`;
       },
     },
     computed: {
