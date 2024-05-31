@@ -34,6 +34,14 @@ const router = new VueRouter({
     routes: routes
 });
 
+router.afterEach((to, from) => {
+    gtag('event', 'page_view', {
+      'send_to': 'G-TJWWQVVMP3',
+      'page_path': to.fullPath
+    });
+});
+
+
 const app = new Vue({
     el: '#app',
     router: router,
