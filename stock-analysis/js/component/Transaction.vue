@@ -2,7 +2,7 @@
     <div>
         <h2>
             <router-link class="p-2 text-dark" :to="{
-                params:{Market:'tw'},
+                params:{Market:this.$route.params.Market},
                 name:'market'}">{{ title }}</router-link> / {{this.$route.params.StockId}}
         </h2>
         <div class="card shadow mb-4">
