@@ -103,6 +103,10 @@
         return `${rate} %`;
       },
       getData() {
+        // 初始化
+        this.summaries = [];
+        this.recent_transaction_logs = [];
+
         axios.get(`${prefixURL}${this.$route.params.Market}/best_bt_summaries.json`).then(function(res) {
           this.summaries = Object.values(res.data);
         }.bind(this));
