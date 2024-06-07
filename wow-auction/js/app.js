@@ -28,7 +28,7 @@ const router = new VueRouter({
 
 router.afterEach((to, from) => {
     gtag('event', 'page_view', {
-      'send_to': 'G-CD462ZBMPC',
+      'send_to': 'G-TP8LN3M34K',
       'page_path': to.fullPath
     });
 });
@@ -53,10 +53,7 @@ const app = new Vue({
         selectItem(id,name) {
             this.SearchItemName = null;
             this.Select.Item = id;
-            this.Select.ItemName = name;            
-            gtag('event', 'SelectItem', {
-                'Item': name
-            });
+            this.Select.ItemName = name;
         },
         selectItemClass(id,name) {
             if(id == this.Select.ItemClass){
