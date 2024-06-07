@@ -55,6 +55,7 @@ module.exports = {
     data: function () {
         return {
             AuctionRecords: [],
+            RTAuctionRecords: [],
             LiveChart: '',
             FetchComplete: true,
             NoticeMsg: '',
@@ -67,11 +68,12 @@ module.exports = {
     methods: {
         fetchAuctionData(item_id) {
             this.FetchComplete = false;
+            this.RTAuctionRecords = []; // 清空一次
             this.AuctionRecords = []; // 清空一次
             // 即時的 auction 資料(4小時更新一次)
             axios.get(prefixURL + `/wow/auction_realtime/${item_id}.json`).then(function (res) {                
                 if (res.data != null) {
-                    this.AuctionRecords = this.AuctionRecords.concat(res.data);
+                    this.RTAuctionRecords = res.data;
                     this.NoticeMsg = '';
                 } else {
                     this.NoticeMsg = '查無紀錄';
@@ -82,7 +84,7 @@ module.exports = {
             // 過去28天的 auction 資料
             axios.get(prefixURL + `/wow/auction/${item_id}.json`).then(function (res) {                
                 if (res.data != null) {
-                    this.AuctionRecords = this.AuctionRecords.concat(res.data);
+                    this.AuctionRecords = res.data;
                     this.NoticeMsg = '';
                 } else {
                     this.NoticeMsg = '查無紀錄';
@@ -212,9 +214,20 @@ module.exports = {
                 this.NoticeMsg = '查無紀錄';
             }
         },
+        // 只會保留每個唯一日期的第一條記錄，重複的日期記錄將被過濾掉。
         PriceRecords: function () {
-            return this.AuctionRecords.filter(record => record.qty != 0);
-            //return this.AuctionRecords.filter(record => record.item_id == this.$route.params.Item && record.qty != 0);
+            const records = this.RTAuctionRecords.concat(this.AuctionRecords).filter(record => record.qty != 0);
+            const uniqueRecords = [];
+            const seenDates = new Set();
+
+            for (const record of records) {
+                if (!seenDates.has(record.date)) {
+                    uniqueRecords.push(record);
+                    seenDates.add(record.date);
+                }
+            }
+
+            return uniqueRecords;
         },
     },
     watch: {
