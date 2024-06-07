@@ -7,6 +7,11 @@ const routes = [
         redirect: { name: 'market', params: { Market: 'tw' } },
     },
     {
+        name: 'method',
+        path: '/method',
+        component: httpVueLoader(`${ComponentBasePath}/Method.vue`),
+    },
+    {
         name: 'about',
         path: '/about',
         component: httpVueLoader(`${ComponentBasePath}/About.vue`),
