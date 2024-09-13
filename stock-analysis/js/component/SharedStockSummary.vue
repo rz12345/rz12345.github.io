@@ -34,6 +34,24 @@
       </div>
     </div>
     <div v-if="summaries.length > 0">
+      <h3>投資方法</h3>
+      <div class="mb-3">
+        <!-- New buttons for switching methods -->
+        <button 
+          class="btn mr-2" 
+          :class="method === 'bt_dividend' ? 'btn-primary' : 'btn-secondary'"
+          @click="switchMethod('bt_dividend')"
+        >
+          bt_dividend
+        </button>
+        <button 
+          class="btn mr-2" 
+          :class="method === 'bt_signals' ? 'btn-primary' : 'btn-secondary'"
+          @click="switchMethod('bt_signals')"
+        >
+          bt_signals
+        </button>
+      </div>
       <h3>標的投報率</h3>
       <div class="mb-3">
         <button class="btn btn-secondary mr-2" @click="sortBy('irr')">年化報酬率 <i class="fas fa-sort-down"></i></button>
@@ -94,7 +112,8 @@
       return {
         summaries: [],
         recent_transaction_logs: [],
-        sortKey: 'irr' // 默認按年化報酬率排序
+        sortKey: 'irr', // 默認按年化報酬率排序
+        method: 'bt_dividend',
       }
     },
     methods: {
@@ -102,12 +121,16 @@
         let rate = parseInt(real * 10000) / 100;
         return `${rate} %`;
       },
+      switchMethod(method){
+        this.method = method;
+        this.getData();
+      },
       getData() {
         // 初始化
         this.summaries = [];
         this.recent_transaction_logs = [];
 
-        axios.get(`${prefixURL}${this.$route.params.Market}/best_bt_summaries.json`).then(function(res) {
+        axios.get(`${prefixURL}${this.$route.params.Market}/${this.method}/summaries.json`).then(function(res) {
           this.summaries = Object.values(res.data);
         }.bind(this));
         axios.get(`${prefixURL}${this.$route.params.Market}/recent_transaction_logs.json`).then(function(res) {
@@ -128,7 +151,7 @@
         },
     },
     mounted: function() {
-      this.getData()
+      this.getData(this.method);
     },
     watch: {
         $route(to, from) {

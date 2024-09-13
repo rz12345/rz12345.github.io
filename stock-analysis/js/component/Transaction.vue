@@ -55,6 +55,7 @@ module.exports = {
         return {
             LiveChart:'',
             transaction_logs: [],
+            method: 'bt_dividend',
         }
     },
     methods: {
@@ -132,7 +133,7 @@ module.exports = {
     mounted: function () {
         this.drawChart();
 
-        axios.get(prefixURL+`${this.$route.params.Market}/best_transaction_logs/${this.$route.params.StockId}.json`).then(function (res) {
+        axios.get(prefixURL+`${this.$route.params.Market}/${this.method}/transaction_logs/${this.$route.params.StockId}.json`).then(function (res) {
             this.transaction_logs = Object.values(res.data);
             this.updateChart();
         }.bind(this));
