@@ -33,33 +33,55 @@
         </div>
       </div>
     </div>
+    <h3>投資方法</h3>
+    <div class="mb-3">
+      <!-- New buttons for switching methods -->
+      <button 
+        class="btn mr-2" 
+        :class="method === 'bt_dividend' ? 'btn-primary' : 'btn-secondary'"
+        @click="switchMethod('bt_dividend')"
+      >
+        bt_dividend
+      </button>
+      <button 
+        class="btn mr-2" 
+        :class="method === 'bt_signals' ? 'btn-primary' : 'btn-secondary'"
+        @click="switchMethod('bt_signals')"
+      >
+        bt_signals
+      </button>
+    </div>
+    <h3>標的投報率</h3>
+    <div class="mb-3">
+      <button 
+        class="btn mr-2" 
+        :class="sortKey == 'irr' ? 'btn-primary' : 'btn-secondary'" 
+        @click="sortBy('irr')"
+      >年化報酬率 <i class="fas fa-sort-down"></i></button>
+      <button 
+        class="btn mr-2" 
+        :class="sortKey == 'roi' ? 'btn-primary' : 'btn-secondary'" 
+        @click="sortBy('roi')"
+      >投報率 <i class="fas fa-sort-down"></i></button>
+      <button 
+        class="btn mr-2" 
+        :class="sortKey == 'asset_value' ? 'btn-primary' : 'btn-secondary'" 
+        @click="sortBy('asset_value')"
+      >資產價值 <i class="fas fa-sort-down"></i></button>
+      <button 
+        class="btn mr-2" 
+        :class="sortKey == 'position_value' ? 'btn-primary' : 'btn-secondary'" 
+        @click="sortBy('position_value')"
+      >持倉價值 <i class="fas fa-sort-down"></i></button>
+      <button 
+        class="btn mr-2" 
+        :class="sortKey == 'broker_dividend' ? 'btn-primary' : 'btn-secondary'" 
+        @click="sortBy('broker_dividend')"
+      >期間配息 <i class="fas fa-sort-down"></i></button>
+    </div>
+
     <div v-if="summaries.length > 0">
-      <h3>投資方法</h3>
-      <div class="mb-3">
-        <!-- New buttons for switching methods -->
-        <button 
-          class="btn mr-2" 
-          :class="method === 'bt_dividend' ? 'btn-primary' : 'btn-secondary'"
-          @click="switchMethod('bt_dividend')"
-        >
-          bt_dividend
-        </button>
-        <button 
-          class="btn mr-2" 
-          :class="method === 'bt_signals' ? 'btn-primary' : 'btn-secondary'"
-          @click="switchMethod('bt_signals')"
-        >
-          bt_signals
-        </button>
-      </div>
-      <h3>標的投報率</h3>
-      <div class="mb-3">
-        <button class="btn btn-secondary mr-2" @click="sortBy('irr')">年化報酬率 <i class="fas fa-sort-down"></i></button>
-        <button class="btn btn-secondary mr-2" @click="sortBy('roi')">投報率 <i class="fas fa-sort-down"></i></button>
-        <button class="btn btn-secondary mr-2" @click="sortBy('asset_value')">資產價值 <i class="fas fa-sort-down"></i></button>
-        <button class="btn btn-secondary mr-2" @click="sortBy('position_value')">持倉價值 <i class="fas fa-sort-down"></i></button>
-        <button class="btn btn-secondary" @click="sortBy('broker_dividend')">期間配息 <i class="fas fa-sort-down"></i></button>
-      </div>
+
       <div class="row">
         <div class="col-md-4 col-sm-6" v-for="record in sortedSummaries">
           <div class="card mb-4">
@@ -123,18 +145,18 @@
       },
       switchMethod(method){
         this.method = method;
-        this.getData();
+        this.getSummary();
       },
-      getData() {
-        // 初始化
-        this.summaries = [];
+      getRecentTransaction() {
         this.recent_transaction_logs = [];
-
-        axios.get(`${prefixURL}${this.$route.params.Market}/${this.method}/summaries.json`).then(function(res) {
-          this.summaries = Object.values(res.data);
-        }.bind(this));
         axios.get(`${prefixURL}${this.$route.params.Market}/recent_transaction_logs.json`).then(function(res) {
           this.recent_transaction_logs = Object.values(res.data);
+        }.bind(this));
+      },
+      getSummary() {
+        this.summaries = [];
+        axios.get(`${prefixURL}${this.$route.params.Market}/${this.method}/summaries.json`).then(function(res) {
+          this.summaries = Object.values(res.data);
         }.bind(this));
       },
       sortBy(key) {
@@ -151,11 +173,13 @@
         },
     },
     mounted: function() {
-      this.getData(this.method);
+      this.getRecentTransaction();
+      this.getSummary();
     },
     watch: {
         $route(to, from) {
-          this.getData()
+          this.getRecentTransaction()
+          this.getSummary();
         },
         //deep: true,
         immediate: true,
