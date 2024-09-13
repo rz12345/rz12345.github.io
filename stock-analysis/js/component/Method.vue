@@ -63,11 +63,6 @@
           <div class="col">
             <p class="mb-0">Hint：有一半以上的程式碼是由 Claude.ai 產生的，包含這個網頁！</p>
           </div>
-          <div class="col-auto">
-            <a class="btn btn-outline-primary" href="https://github.com/rz12345/stock-analysis/blob/main/app/repositories/base_strategy.py" target="_blank" rel="noopener noreferrer" role="button">
-              <i class="bi bi-code-slash me-2"></i>完整代碼
-            </a>
-          </div>
         </div>
       </div>
     </div>
