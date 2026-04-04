@@ -39,6 +39,7 @@
           <ol class="list-group list-group-flush">
             <li class="list-group-item">bt_signals: 當移動平均匯聚背離指標(MACD)由負轉正,且 RSI 低於 50 時買入。</li>
             <li class="list-group-item">bt_dividend: 在除息後買入。</li>
+            <li class="list-group-item">bt_ma_pullback: 當股價回測到移動平均線（MA）支撐時買入。</li>
           </ol>
         </div>
       </div>

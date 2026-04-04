@@ -43,12 +43,19 @@
       >
         bt_dividend
       </button>
-      <button 
-        class="btn mr-2" 
+      <button
+        class="btn mr-2"
         :class="method === 'bt_signals' ? 'btn-primary' : 'btn-secondary'"
         @click="switchMethod('bt_signals')"
       >
         bt_signals
+      </button>
+      <button
+        class="btn mr-2"
+        :class="method === 'bt_ma_pullback' ? 'btn-primary' : 'btn-secondary'"
+        @click="switchMethod('bt_ma_pullback')"
+      >
+        bt_ma_pullback
       </button>
     </div>
     <h3>標的投報率</h3>
