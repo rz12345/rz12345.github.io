@@ -96,6 +96,7 @@ const app = new Vue({
                 this.Favorites = [...this.Favorites, {
                     id: item.id,
                     name: item.name,
+                    level: item.level,
                     item_class_id: item.item_class_id,
                     item_subclass_id: item.item_subclass_id,
                 }];
@@ -111,11 +112,16 @@ const app = new Vue({
             const sub = (cls.item_subclass || []).find(s => s.item_subclass_id == item_subclass_id);
             return sub ? sub.item_subclass_name : '';
         },
+        getItemLevel(itemId) {
+            const item = this.Items.find(i => i.id == itemId);
+            return item ? item.level : null;
+        },
         addToRecent(item) {
             const filtered = this.RecentlyViewed.filter(r => r.id !== item.id);
             this.RecentlyViewed = [{
                 id: item.id,
                 name: item.name,
+                level: item.level,
                 item_class_id: item.item_class_id,
                 item_subclass_id: item.item_subclass_id,
             }, ...filtered].slice(0, 20);
