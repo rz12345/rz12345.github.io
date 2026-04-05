@@ -41,19 +41,25 @@ const app = new Vue({
         ItemClasses: [],
         Select: {
             ItemClass: null,
-            ItemSubClass: null,            
+            ItemSubClass: null,
             ItemClassName: null,
             ItemSubClassName: null,
             Item: null,
             ItemName: null,
         },
         SearchItemName: null,
+        Favorites: [],
+        RecentlyViewed: [],
+        SidebarView: null,
     },
     methods: {
-        selectItem(id,name) {
+        selectItem(id, name) {
             this.SearchItemName = null;
+            this.SidebarView = null;
             this.Select.Item = id;
             this.Select.ItemName = name;
+            const item = this.Items.find(i => i.id == id);
+            if (item) this.addToRecent(item);
         },
         selectItemClass(id,name) {
             if(id == this.Select.ItemClass){
@@ -64,14 +70,57 @@ const app = new Vue({
                 this.Select.ItemClassName = name;
             }            
         },
-        selectItemSubClass(id,name) {
+        selectItemSubClass(id, name) {
             this.Select.ItemSubClass = id;
             this.Select.ItemSubClassName = name;
         },
-
+        loadLocalData() {
+            const favRaw = localStorage.getItem('wow_auction_favorites');
+            this.Favorites = favRaw ? JSON.parse(favRaw) : [];
+            const recentRaw = localStorage.getItem('wow_auction_recent');
+            this.RecentlyViewed = recentRaw ? JSON.parse(recentRaw) : [];
+        },
+        saveFavorites() {
+            localStorage.setItem('wow_auction_favorites', JSON.stringify(this.Favorites));
+        },
+        saveRecent() {
+            localStorage.setItem('wow_auction_recent', JSON.stringify(this.RecentlyViewed));
+        },
+        toggleFavorite(item) {
+            const idx = this.Favorites.findIndex(f => f.id === item.id);
+            if (idx >= 0) {
+                this.Favorites = this.Favorites.filter(f => f.id !== item.id);
+            } else {
+                this.Favorites = [...this.Favorites, {
+                    id: item.id,
+                    name: item.name,
+                    item_class_id: item.item_class_id,
+                    item_subclass_id: item.item_subclass_id,
+                }];
+            }
+            this.saveFavorites();
+        },
+        isFavorite(itemId) {
+            return this.Favorites.some(f => f.id == itemId);
+        },
+        addToRecent(item) {
+            const filtered = this.RecentlyViewed.filter(r => r.id !== item.id);
+            this.RecentlyViewed = [{
+                id: item.id,
+                name: item.name,
+                item_class_id: item.item_class_id,
+                item_subclass_id: item.item_subclass_id,
+            }, ...filtered].slice(0, 20);
+            this.saveRecent();
+        },
+        setSidebarView(view) {
+            this.SidebarView = this.SidebarView === view ? null : view;
+            this.SearchItemName = null;
+        },
     },
     mounted: function () {
-        // item data initial 
+        this.loadLocalData();
+        // item data initial
         axios.get(prefixURL+`/wow/item_focus_list.json`).then(function (res) {
             //this.Items = res.data;
             this.Items = Object.values(res.data);            

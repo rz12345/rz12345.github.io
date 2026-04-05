@@ -1,129 +1,245 @@
 <!DOCTYPE html>
 <html>
-
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      rel="stylesheet" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
       integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
       crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'wow-bg':        '#1c1e22',
+              'wow-nav':       '#25282d',
+              'wow-panel':     '#2a2d31',
+              'wow-panel-alt': '#232629',
+              'wow-border':    '#35383d',
+              'wow-gold':      '#f9b234',
+              'wow-gold-dim':  '#b87d14',
+              'wow-text':      '#b8bdc8',
+              'wow-text-dim':  '#7a7e8a',
+              'wow-link':      '#4fc1e9',
+              'wow-link-hov':  '#7dd6f5',
+              'wow-hover':     '#313438',
+              'wow-active':    '#1a4a6b',
+            }
+          }
+        }
+      }
+    </script>
     <link href="css/app.css" rel="stylesheet" type="text/css" />
-    <!--
-<script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
-      integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
-      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js"
       integrity="sha512-BKbSR+cfyxLdMAsE0naLReFSLg8/pjbgfxHh/k/kUC82Hy7r6HtR5hLhobaln2gcTvzkyyehrdREdjpsQwy2Jw=="
       crossorigin="anonymous"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.4.3/vue-router.min.js"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.4.3/vue-router.min.js"
       integrity="sha512-mVyZZ423iwLddhRdWCJeQSysHfnDZZPJRlY9HJI6/39e6D8Myz3nQCelJmSMOf8MOreTzWDmh8bYftrBnTau1Q=="
       crossorigin="anonymous"></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.2/src/httpVueLoader.min.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.2/src/httpVueLoader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"
       integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg=="
       crossorigin="anonymous"></script>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js"
       integrity="sha256-qoN08nWXsFH+S9CtIq99e5yzYHioRHtNB9t2qy1MSmc="
       crossorigin="anonymous"></script>
-    <!-- Wowhead tootips -->
+    <!-- Wowhead tooltips -->
     <script>const whTooltips = {colorLinks: false, iconizeLinks: false, renameLinks: false};</script>
     <script src="https://wow.zamimg.com/widgets/power.js"></script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async
-      src="https://www.googletagmanager.com/gtag/js?id=G-CD462ZBMPC"></script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD462ZBMPC"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
-      gtag('config', 'G-CD462ZBMPC',{});
+      gtag('config', 'G-CD462ZBMPC', {});
     </script>
     <title>魔獸拍賣場看板</title>
   </head>
-  <body>
-    <div id="app" class="container">
-      <div class="jumbotron">
-        <ul class="nav nav-pills">
-          <li class="nav-item">
-            <span class="nav-link" style="font-size: 24px; color: Dodgerblue;"><i
-                class="fab fa-battle-net"></i> <router-link to="/">魔獸拍賣場看板
-                (TW-巨龍崛起)</router-link></span>
-          </li>
-          <li class="nav-item ml-auto">
-            <span class="nav-link" style="font-size: 18px;">
-              <i class="fas fa-search"></i> <input type="text"
-                v-model="SearchItemName" style="margin-left: 5px;">
-            </span>
+  <body class="bg-wow-bg text-wow-text">
+    <div id="app" class="min-h-screen flex flex-col">
 
-          </li>
-        </ul>
-      </div>
+      <!-- Navbar -->
+      <nav class="bg-wow-nav border-b-2 border-wow-gold-dim px-6 py-3 flex items-center flex-shrink-0 sticky top-0 z-10">
+        <router-link to="/"
+          class="text-wow-gold font-bold text-xl no-underline hover:text-wow-gold">
+          魔獸拍賣場看板 (TW)
+        </router-link>
+        <div class="ml-auto flex items-center gap-2">
+          <i class="fas fa-search text-wow-text-dim text-sm"></i>
+          <input type="text" v-model="SearchItemName"
+            class="bg-wow-panel-alt border border-wow-border text-wow-text rounded px-3 py-1.5 text-sm focus:outline-none focus:border-wow-link focus:ring-1 focus:ring-wow-link transition-colors w-52"
+            placeholder="搜尋物品...">
+        </div>
+      </nav>
 
-      <div class="row">
-        <!-- ItemClasses -->
-        <div class="col-md-3">
-          <div class="list-group list-group-root">
-            <div class="list-group-item list-group-item-action"
-              data-toggle="collapse" v-for="i in
-              ItemClasses" :key="i.id"
-              @click.self="selectItemClass(i.item_class_id,i.item_class_name)"
-              v-bind:class="{ 'active': i.item_class_name ==
-              Select.ItemClassName }">
-              <i class="fas" v-bind:class="{'fa-plus': i.item_class_name !=
-                Select.ItemClassName, 'fa-minus': i.item_class_name ==
-                Select.ItemClassName}"></i> {{ i.item_class_name }}
-              <div class="list-group collapse">
-                <router-link class="list-group-item list-group-item-action"
-                  v-for="j in
-                  i.item_subclass" :key="j.id"
-                  :to="{params:{ItemClass:Select.ItemClass,ItemSubClass:Select.ItemSubClass},name:'itemSubClass'}"
-                  @click.native="selectItemSubClass(j.item_subclass_id,j.item_subclass_name)"
-                  v-bind:class="{ 'active':
-                  j.item_subclass_name ==
-                  Select.ItemSubClassName }">{{ j.item_subclass_name }}</router-link>
+      <!-- Layout -->
+      <div class="flex flex-1">
+
+        <!-- Sidebar -->
+        <aside class="w-52 flex-shrink-0 bg-wow-panel-alt border-r border-wow-border">
+
+          <!-- Favorites & Recently Viewed -->
+          <div class="border-b-2 border-wow-border">
+            <button @click="setSidebarView('favorites')"
+              class="w-full flex items-center justify-between px-3 py-2.5 text-sm transition-colors duration-100"
+              :class="SidebarView==='favorites' ? 'bg-wow-active text-wow-gold' : 'text-wow-text hover:bg-wow-hover hover:text-white'">
+              <span><i class="fas fa-star text-xs mr-2"></i>我的最愛</span>
+              <span class="text-xs bg-wow-panel rounded px-1.5 py-0.5"
+                :class="SidebarView==='favorites' ? 'text-wow-gold' : 'text-wow-text-dim'">{{ Favorites.length }}</span>
+            </button>
+            <button @click="setSidebarView('recent')"
+              class="w-full flex items-center justify-between px-3 py-2.5 text-sm border-t border-wow-border transition-colors duration-100"
+              :class="SidebarView==='recent' ? 'bg-wow-active text-wow-link' : 'text-wow-text hover:bg-wow-hover hover:text-white'">
+              <span><i class="fas fa-history text-xs mr-2"></i>最近瀏覽</span>
+              <span class="text-xs bg-wow-panel rounded px-1.5 py-0.5"
+                :class="SidebarView==='recent' ? 'text-wow-link' : 'text-wow-text-dim'">{{ RecentlyViewed.length }}</span>
+            </button>
+          </div>
+
+          <div v-for="i in ItemClasses" :key="i.id">
+            <!-- Category header -->
+            <div
+              class="flex items-center px-3 py-2.5 text-sm border-b border-wow-border cursor-pointer select-none transition-colors duration-100"
+              :class="i.item_class_name == Select.ItemClassName
+                ? 'bg-wow-active text-white'
+                : 'text-wow-text hover:bg-wow-hover hover:text-white'"
+              @click="selectItemClass(i.item_class_id, i.item_class_name)">
+              <i class="fas fa-fw text-xs mr-2"
+                :class="i.item_class_name == Select.ItemClassName
+                  ? 'fa-chevron-down'
+                  : 'fa-chevron-right'"></i>
+              <span>{{ i.item_class_name }}</span>
+            </div>
+            <!-- Subclasses -->
+            <div v-show="i.item_class_name == Select.ItemClassName">
+              <router-link
+                v-for="j in i.item_subclass" :key="j.id"
+                class="flex items-center pl-8 pr-3 py-2 text-sm border-b border-wow-border no-underline transition-colors duration-100"
+                :class="j.item_subclass_name == Select.ItemSubClassName
+                  ? 'bg-wow-active text-wow-link border-l-2 border-wow-link'
+                  : 'text-wow-text-dim hover:bg-wow-hover hover:text-white'"
+                :to="{params:{ItemClass:Select.ItemClass,ItemSubClass:Select.ItemSubClass},name:'itemSubClass'}"
+                @click.native="selectItemSubClass(j.item_subclass_id, j.item_subclass_name)">
+                {{ j.item_subclass_name }}
+              </router-link>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 min-w-0">
+
+          <!-- Favorites View -->
+          <div v-if="SidebarView === 'favorites'">
+            <h2 class="text-wow-gold text-xs font-semibold uppercase tracking-wider border-b border-wow-border pb-2 mb-4">
+              <i class="fas fa-star mr-1"></i>我的最愛
+            </h2>
+            <p v-if="Favorites.length === 0" class="text-wow-text-dim italic text-center py-10">
+              尚無收藏。點擊物品卡片右側的 ☆ 即可加入。
+            </p>
+            <div class="grid grid-cols-3 gap-2">
+              <div v-for="item in Favorites" :key="item.id" class="relative">
+                <router-link
+                  class="item-card pr-7"
+                  :to="{params:{ItemClass:item.item_class_id,ItemSubClass:item.item_subclass_id,Item:item.id},name:'Stat'}"
+                  @click.native="selectItem(item.id, item.name)">
+                  {{ item.name }}
+                </router-link>
+                <button @click.stop="toggleFavorite(item)"
+                  class="absolute top-1 right-1 z-10 text-sm leading-none text-yellow-400 hover:text-gray-400 transition-colors"
+                  title="移除收藏">★</button>
               </div>
             </div>
           </div>
-        </div>
-        <!-- Statics Data -->
-        <div class="col-md-9">
-          <div class="row" v-if="SearchItemName">
-            <div class="col-md-12">
-              <h2>Search Results:</h2>
-              {{SearchItemRecords.length > 0 ? '':'查無資料'}}
-            </div>            
-            <router-link class="col-md-4" v-for="item in SearchItemRecords"
-              :to="{
-              params:{ItemClass:item.item_class_id,ItemSubClass:item.item_subclass_id,Item:item.id},
-              name:'Stat'}" @click.native.self="selectItem(item.id,item.name)"
-              v-bind:key="item.id">{{item.name}} ({{item.level}})</router-link>
-          </div>
-          <div class="row" v-if="!$route.params.Item">
-            <div class="col-md-12" v-if="$route.params.ItemSubClass != null">
-              <h2>Item Class Items:</h2>
-            </div>
-            <router-link class="col-md-4" v-for="item in ItemRecords"
-              :to="{
-              params:{ItemClass:item.item_class_id,ItemSubClass:item.item_subclass_id,Item:item.id},
-              name:'Stat'}" @click.native.self="selectItem(item.id,item.name)"
-              v-bind:key="item.id">{{item.name}} ({{item.level}})</router-link>
-          </div>
-          <router-view></router-view>
-        </div>
-      </div>
 
+          <!-- Recently Viewed -->
+          <div v-else-if="SidebarView === 'recent'">
+            <h2 class="text-wow-gold text-xs font-semibold uppercase tracking-wider border-b border-wow-border pb-2 mb-4">
+              <i class="fas fa-history mr-1"></i>最近瀏覽
+            </h2>
+            <p v-if="RecentlyViewed.length === 0" class="text-wow-text-dim italic text-center py-10">
+              尚無瀏覽記錄。
+            </p>
+            <div class="grid grid-cols-3 gap-2">
+              <div v-for="item in RecentlyViewed" :key="item.id" class="relative">
+                <router-link
+                  class="item-card pr-7"
+                  :to="{params:{ItemClass:item.item_class_id,ItemSubClass:item.item_subclass_id,Item:item.id},name:'Stat'}"
+                  @click.native="selectItem(item.id, item.name)">
+                  {{ item.name }}
+                </router-link>
+                <button @click.stop="toggleFavorite(item)"
+                  class="absolute top-1 right-1 z-10 text-sm leading-none transition-colors"
+                  :class="isFavorite(item.id) ? 'text-yellow-400 hover:text-gray-400' : 'text-wow-text-dim hover:text-yellow-300'"
+                  :title="isFavorite(item.id) ? '移除收藏' : '加入收藏'">
+                  {{ isFavorite(item.id) ? '★' : '☆' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Normal Content -->
+          <div v-else>
+
+            <!-- Search Results -->
+            <div v-if="SearchItemName">
+              <h2 class="text-wow-gold text-xs font-semibold uppercase tracking-wider border-b border-wow-border pb-2 mb-4">
+                搜尋結果
+              </h2>
+              <p v-if="SearchItemRecords.length === 0"
+                class="text-wow-text-dim italic text-center py-10">查無資料</p>
+              <div class="grid grid-cols-3 gap-2">
+                <div v-for="item in SearchItemRecords" :key="item.id" class="relative">
+                  <router-link
+                    class="item-card pr-7"
+                    :to="{params:{ItemClass:item.item_class_id,ItemSubClass:item.item_subclass_id,Item:item.id},name:'Stat'}"
+                    @click.native="selectItem(item.id, item.name)">
+                    {{ item.name }} ({{ item.level }})
+                  </router-link>
+                  <button @click.stop="toggleFavorite(item)"
+                    class="absolute top-1 right-1 z-10 text-sm leading-none transition-colors"
+                    :class="isFavorite(item.id) ? 'text-yellow-400 hover:text-gray-400' : 'text-wow-text-dim hover:text-yellow-300'"
+                    :title="isFavorite(item.id) ? '移除收藏' : '加入收藏'">
+                    {{ isFavorite(item.id) ? '★' : '☆' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Item List -->
+            <div v-if="!$route.params.Item && !SearchItemName">
+              <h2 v-if="$route.params.ItemSubClass != null"
+                class="text-wow-gold text-xs font-semibold uppercase tracking-wider border-b border-wow-border pb-2 mb-4">
+                物品列表
+              </h2>
+              <div class="grid grid-cols-3 gap-2">
+                <div v-for="item in ItemRecords" :key="item.id" class="relative">
+                  <router-link
+                    class="item-card pr-7"
+                    :to="{params:{ItemClass:item.item_class_id,ItemSubClass:item.item_subclass_id,Item:item.id},name:'Stat'}"
+                    @click.native="selectItem(item.id, item.name)">
+                    {{ item.name }} ({{ item.level }})
+                  </router-link>
+                  <button @click.stop="toggleFavorite(item)"
+                    class="absolute top-1 right-1 z-10 text-sm leading-none transition-colors"
+                    :class="isFavorite(item.id) ? 'text-yellow-400 hover:text-gray-400' : 'text-wow-text-dim hover:text-yellow-300'"
+                    :title="isFavorite(item.id) ? '移除收藏' : '加入收藏'">
+                    {{ isFavorite(item.id) ? '★' : '☆' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <router-view></router-view>
+          </div>
+        </main>
+
+      </div>
     </div>
     <script src="js/app.js"></script>
   </body>
-
 </html>

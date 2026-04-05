@@ -1,47 +1,32 @@
-.jumbotron{
-  padding: 0.5rem;
+/* =====================================================
+   Custom styles — Tailwind handles everything else
+   ===================================================== */
 
+/* ── Item card (used via router-link class="item-card") ── */
+.item-card {
+  display: block;
+  padding: 0.35rem 0.65rem;
+  border-radius: 3px;
+  border: 1px solid #35383d;
+  color: #4fc1e9;
+  background: #2a2d31;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.item-card:hover {
+  background: #313438;
+  border-color: #4fc1e9;
+  color: #7dd6f5;
+  text-decoration: none;
 }
 
-.jumbotron select{
-margin: 0.5rem;
+/* ── Price currency colors ── */
+.price-gold   { color: #f9b234; font-weight: 600; }
+.price-silver { color: #9ba8b5; font-weight: 600; }
+.price-copper { color: #c27c37; font-weight: 600; }
+
+/* ── Table row hover — needs !important to beat Tailwind's odd/even bg ── */
+.price-table tbody tr:hover td {
+  background: #313438 !important;
 }
-
-.router-link-exact-active{
-/*z-index: 2;*/
-/*
-color: #fff;
-background-color: #007bff;
-border-color: #007bff;
-*/
-}
-
-
-
-/* https://jsfiddle.net/ann7tctp/
-*/
-
-
-
-
-
-.list-group-item{
-padding: 0.5rem 0.75rem;
-}
-
-.list-group-item.active .list-group.collapse{
-display: inherit;
-margin: 0.5rem -0.75rem -0.5rem -0.75rem;
-}
-.list-group-item.active .list-group.collapse .list-group-item{
-padding-left: 1.8rem;
-}
-
-
-.list-group.list-group-root .list-group-item {
-border-radius: 0;
-/*border-width: 1px 0 0 0;*/
-}
-
-
-

@@ -1,49 +1,82 @@
 <template>
     <div>
         <!-- Loading -->
-        <div v-show="!FetchComplete">
-            <div class="d-flex align-items-center">
-                <strong>Loading...</strong>
-                <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
-            </div>
+        <div v-show="!FetchComplete" class="flex items-center gap-3 py-8">
+            <div class="animate-spin rounded-full h-5 w-5 border-2 border-wow-gold border-t-transparent"></div>
+            <span class="text-wow-text-dim text-sm">載入中...</span>
         </div>
+
         <!-- Notice -->
-        <div v-show="FetchComplete">{{ NoticeMsg }}</div>
-        <div v-show="FetchComplete & AuctionRecords.length > 0">
+        <div v-show="FetchComplete && NoticeMsg"
+            class="text-wow-text-dim italic text-center py-10">{{ NoticeMsg }}</div>
+
+        <!-- Content -->
+        <div v-show="FetchComplete && AuctionRecords.length > 0">
+
             <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">{{ ItemClassName }}</li>
-                    <li class="breadcrumb-item">{{ ItemSubClassName }}</li>
-                    <li class="breadcrumb-item">
-                        <a :href="`https://www.wowhead.com/item=${Item}/`" target="_blank">{{ ItemName }}</a>
+            <nav class="mb-4">
+                <ol class="flex items-center gap-1.5 text-sm bg-wow-panel border border-wow-border rounded px-3 py-2">
+                    <li class="text-wow-text-dim">{{ ItemClassName }}</li>
+                    <li class="text-wow-border text-xs select-none">/</li>
+                    <li class="text-wow-text-dim">{{ ItemSubClassName }}</li>
+                    <li class="text-wow-border text-xs select-none">/</li>
+                    <li class="flex items-center gap-1.5">
+                        <a :href="`https://www.wowhead.com/item=${Item}/`" target="_blank"
+                            class="text-wow-link hover:text-wow-link-hov no-underline">{{ ItemName }}</a>
+                        <button
+                            @click="$parent.toggleFavorite({id:Item, name:ItemName, item_class_id:ItemClass, item_subclass_id:ItemSubClass})"
+                            class="text-sm leading-none transition-colors"
+                            :class="$parent.isFavorite(Item) ? 'text-yellow-400 hover:text-gray-400' : 'text-wow-text-dim hover:text-yellow-300'"
+                            :title="$parent.isFavorite(Item) ? '移除收藏' : '加入收藏'">
+                            {{ $parent.isFavorite(Item) ? '★' : '☆' }}
+                        </button>
                     </li>
                 </ol>
             </nav>
+
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-3 gap-3 mb-4" v-if="PriceRecords.length > 0">
+                <div class="bg-wow-panel border border-wow-border rounded p-3 text-center">
+                    <div class="text-wow-text-dim text-xs uppercase tracking-wider mb-1">最低價</div>
+                    <div class="text-base" v-html="convertPrice(LatestRecord.min)"></div>
+                </div>
+                <div class="bg-wow-panel border border-wow-border rounded p-3 text-center">
+                    <div class="text-wow-text-dim text-xs uppercase tracking-wider mb-1">中間價</div>
+                    <div class="text-base" v-html="convertPrice(LatestRecord.median)"></div>
+                </div>
+                <div class="bg-wow-panel border border-wow-border rounded p-3 text-center">
+                    <div class="text-wow-text-dim text-xs uppercase tracking-wider mb-1">最高價</div>
+                    <div class="text-base" v-html="convertPrice(LatestRecord.max)"></div>
+                </div>
+            </div>
+
             <!-- Chart -->
-            <canvas id="myChart"></canvas>
-            <!-- AuctionRecords -->
-            <table class="table">
+            <canvas id="myChart"
+                class="w-full rounded border border-wow-border bg-wow-panel p-2 mb-4"></canvas>
+
+            <!-- Price Table -->
+            <table class="price-table w-full text-sm border-collapse">
                 <thead>
-                    <tr>
-                        <th>日期</th>
-                        <th>最低價</th>
-                        <th>最高價</th>
-                        <th>中間價</th>
-                        <th>貨量</th>
+                    <tr class="bg-wow-nav border-b border-wow-border">
+                        <th class="text-left px-3 py-2.5 text-wow-gold text-xs font-semibold uppercase tracking-wider">日期</th>
+                        <th class="text-left px-3 py-2.5 text-wow-gold text-xs font-semibold uppercase tracking-wider">最低價</th>
+                        <th class="text-left px-3 py-2.5 text-wow-gold text-xs font-semibold uppercase tracking-wider">最高價</th>
+                        <th class="text-left px-3 py-2.5 text-wow-gold text-xs font-semibold uppercase tracking-wider">中間價</th>
+                        <th class="text-left px-3 py-2.5 text-wow-gold text-xs font-semibold uppercase tracking-wider">貨量</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- reverse sort by date -->
-                    <tr v-for="record in PriceRecords.sort((a, b) => new Date(b.date) - new Date(a.date))">
-                        <td>{{ record.date }}</td>
-                        <td>{{ convertPrice(record.min) }}</td>
-                        <td>{{ convertPrice(record.max) }}</td>
-                        <td>{{ convertPrice(record.median) }}</td>
-                        <td>{{ record.qty }}</td>
+                    <tr v-for="record in PriceRecords.sort((a, b) => new Date(b.date) - new Date(a.date))"
+                        class="border-b border-wow-border odd:bg-wow-panel even:bg-wow-panel-alt transition-colors duration-75">
+                        <td class="px-3 py-2.5 text-wow-text-dim">{{ record.date }}</td>
+                        <td class="px-3 py-2.5" v-html="convertPrice(record.min)"></td>
+                        <td class="px-3 py-2.5" v-html="convertPrice(record.max)"></td>
+                        <td class="px-3 py-2.5" v-html="convertPrice(record.median)"></td>
+                        <td class="px-3 py-2.5 text-wow-text-dim">{{ record.qty }}</td>
                     </tr>
                 </tbody>
             </table>
+
         </div>
     </div>
 </template>
@@ -71,7 +104,7 @@ module.exports = {
             this.RTAuctionRecords = []; // 清空一次
             this.AuctionRecords = []; // 清空一次
             // 即時的 auction 資料(4小時更新一次)
-            axios.get(prefixURL + `/wow/auction_realtime/${item_id}.json`).then(function (res) {                
+            axios.get(prefixURL + `/wow/auction_realtime/${item_id}.json`).then(function (res) {
                 if (res.data != null) {
                     this.RTAuctionRecords = res.data;
                     this.NoticeMsg = '';
@@ -82,7 +115,7 @@ module.exports = {
                 //this.updateChart();
             }.bind(this));
             // 過去28天的 auction 資料
-            axios.get(prefixURL + `/wow/auction/${item_id}.json`).then(function (res) {                
+            axios.get(prefixURL + `/wow/auction/${item_id}.json`).then(function (res) {
                 if (res.data != null) {
                     this.AuctionRecords = res.data;
                     this.NoticeMsg = '';
@@ -95,7 +128,7 @@ module.exports = {
         },
         /**
          * 用於透過 params 載入頁面時，讀取 item 資訊
-         * @param {*} item_id 
+         * @param {*} item_id
          */
         fetchItemInfo(item_id) {
             axios.get(prefixURL+`/wow/item_focus_list/${item_id}.json`).then(function (res) {
@@ -105,59 +138,43 @@ module.exports = {
             }.bind(this));
         },
         convertPrice(price) {
-            let g = parseInt(price / 10000);
-            let s = parseInt((price % 10000) / 100);
-            let c = parseInt((price % 10000 % 100));
-            return `${g}G ${s}S ${c}C`;
+            const g = parseInt(price / 10000);
+            const s = parseInt((price % 10000) / 100);
+            const c = parseInt(price % 100);
+            return `<span class="price-gold">${g}G</span> <span class="price-silver">${s}S</span> <span class="price-copper">${c}C</span>`;
         },
         drawChart() {
+            const tickColor = '#7a7e8a';
+            const gridColor = '#35383d';
             let ctx = document.getElementById('myChart');
             let live_chart = new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: '',
-                        data: [],
-                    }]
-                },
+                data: { labels: [], datasets: [{ label: '', data: [] }] },
                 options: {
-                    //responsive: true,
-                    //maintainAspectRatio: false,
-                    /* 
-                    legend: {
-                        display: false
+                    plugins: {
+                        legend: {
+                            labels: { color: '#b8bdc8', boxWidth: 12 }
+                        }
                     },
-                    */
                     scales: {
+                        x: {
+                            ticks: { color: tickColor },
+                            grid: { color: gridColor }
+                        },
                         y: {
                             type: 'linear',
                             display: true,
                             position: 'left',
-                            ticks: {
-                                beginAtZero: true
-                            }
+                            ticks: { color: tickColor, beginAtZero: true },
+                            grid: { color: gridColor }
                         },
                         y1: {
                             type: 'linear',
                             display: true,
                             position: 'right',
-                            ticks: {
-                                beginAtZero: true
-                            },
-                            // grid line settings                                
-                            grid: {
-                                drawOnChartArea: false, // only want the grid lines for one axis to show up
-                            },
-
+                            ticks: { color: tickColor, beginAtZero: true },
+                            grid: { drawOnChartArea: false }
                         },
-                        /*
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }],
-                        */
                     }
                 }
             });
@@ -167,31 +184,28 @@ module.exports = {
             this.LiveChart.data.labels = this.PriceRecords.map(record => dayjs(record.date).format("MM-DD"));
             this.LiveChart.data.datasets = [{
                 type: 'line',
-                label: 'min',
+                label: '最低價',
                 data: this.PriceRecords.map(record => record.min),
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
-                //yAxisID: 'y',
             },
             {
                 type: 'line',
-                label: 'max',
+                label: '最高價',
                 data: this.PriceRecords.map(record => record.max),
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderColor: 'rgba(255, 99, 132, 1)',
-                //yAxisID: 'y',
             },
             {
                 type: 'line',
-                label: 'median',
+                label: '中間價',
                 data: this.PriceRecords.map(record => record.median),
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
-                //yAxisID: 'y',
             },
             {
                 type: 'bar',
-                label: 'qty',
+                label: '貨量',
                 data: this.PriceRecords.map(record => record.qty),
                 yAxisID: 'y1',
             }
@@ -213,6 +227,10 @@ module.exports = {
             } else {
                 this.NoticeMsg = '查無紀錄';
             }
+        },
+        LatestRecord: function () {
+            if (this.PriceRecords.length === 0) return { min: 0, max: 0, median: 0 };
+            return this.PriceRecords.slice().sort((a, b) => new Date(b.date) - new Date(a.date))[0];
         },
         // 只會保留每個唯一日期的第一條記錄，重複的日期記錄將被過濾掉。
         PriceRecords: function () {
