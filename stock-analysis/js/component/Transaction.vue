@@ -35,7 +35,7 @@
               <td class="px-4 py-3 text-slate-500 whitespace-nowrap tabular-nums">{{ record.date }}</td>
               <td class="px-4 py-3 whitespace-nowrap">
                 <span class="px-2 py-0.5 rounded-full text-xs bg-sky-900/30 text-sky-400 border border-sky-800/40 font-medium">
-                  {{ record.method }}
+                  {{ methodLabel(record.method) }}
                 </span>
               </td>
               <td class="px-4 py-3 text-right text-slate-400 whitespace-nowrap tabular-nums">{{ record.position_size }}</td>
@@ -108,6 +108,14 @@ module.exports = {
     },
   },
   methods: {
+    methodLabel(key) {
+      const map = {
+        bt_dividend:    '除息策略',
+        bt_signals:     'MACD 訊號',
+        bt_ma_pullback: '均線回測',
+      };
+      return map[key] || key;
+    },
     barWidth(value, max) {
       if (!max) return '0%';
       return Math.round(value / max * 100) + '%';
