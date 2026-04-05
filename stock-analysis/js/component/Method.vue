@@ -52,6 +52,10 @@
               <span class="text-sky-400 font-bold tabular-nums mt-px">03</span>
               <span><span class="text-sky-300 font-medium">bt_ma_pullback</span>：當股價回測到移動平均線（MA）支撐時買入。</span>
             </li>
+            <li class="py-3 flex gap-3 items-start">
+              <span class="text-sky-400 font-bold tabular-nums mt-px">04</span>
+              <span><span class="text-sky-300 font-medium">bt_monthly_dca</span>：每月固定買入，不擇時進場，長期累積持股。</span>
+            </li>
           </ol>
         </div>
       </div>

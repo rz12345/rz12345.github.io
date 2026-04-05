@@ -100,7 +100,7 @@
                 </div>
 
                 <div class="flex justify-end mt-3">
-                  <span class="text-xs text-sky-400/70 bg-sky-900/20 border border-sky-800/30 px-2 py-0.5 rounded-full">{{ record.method }}</span>
+                  <span class="text-xs text-sky-400/70 bg-sky-900/20 border border-sky-800/30 px-2 py-0.5 rounded-full">{{ methodLabel(record.method) }}</span>
                 </div>
               </div>
             </div>
@@ -136,7 +136,7 @@
                 </span>
               </div>
               <div class="flex justify-between items-center mt-1">
-                <span class="text-xs text-sky-400/60 bg-sky-900/20 border border-sky-800/30 px-1.5 py-0.5 rounded-full">{{ record.method }}</span>
+                <span class="text-xs text-sky-400/60 bg-sky-900/20 border border-sky-800/30 px-1.5 py-0.5 rounded-full">{{ methodLabel(record.method) }}</span>
                 <span class="text-xs text-slate-500">{{ formatCurrency(record.date_closed_price) }}</span>
               </div>
             </router-link>
@@ -159,8 +159,10 @@ module.exports = {
       sortDir: 'desc',
       isLoading: false,
       methods: [
-        { key: 'bt_dividend', label: '除息策略' },
-        { key: 'bt_signals',  label: 'MACD 訊號' },
+        { key: 'bt_dividend',    label: '除息策略' },
+        { key: 'bt_signals',     label: 'MACD 訊號' },
+        { key: 'bt_ma_pullback', label: '均線回測' },
+        { key: 'bt_monthly_dca', label: '定期定額' },
       ],
       sortOptions: [
         { key: 'irr',            label: '年化報酬率' },
@@ -173,6 +175,10 @@ module.exports = {
     }
   },
   methods: {
+    methodLabel(key) {
+      const found = this.methods.find(m => m.key === key);
+      return found ? found.label : key;
+    },
     convertRate(real) {
       const rate = (parseInt(real * 10000) / 100).toFixed(2);
       const sign = real >= 0 ? '+' : '';
