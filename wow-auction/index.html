@@ -147,7 +147,7 @@
                   class="item-card pr-7"
                   :to="{params:{ItemClass:item.item_class_id,ItemSubClass:item.item_subclass_id,Item:item.id},name:'Stat'}"
                   @click.native="selectItem(item.id, item.name)">
-                  {{ item.name }}
+                  <span class="text-wow-text-dim text-xs block leading-tight">{{ getItemSubClassName(item.item_class_id, item.item_subclass_id) }}</span>{{ item.name }}
                 </router-link>
                 <button @click.stop="toggleFavorite(item)"
                   class="absolute top-1 right-1 z-10 text-sm leading-none text-yellow-400 hover:text-gray-400 transition-colors"
@@ -170,7 +170,7 @@
                   class="item-card pr-7"
                   :to="{params:{ItemClass:item.item_class_id,ItemSubClass:item.item_subclass_id,Item:item.id},name:'Stat'}"
                   @click.native="selectItem(item.id, item.name)">
-                  {{ item.name }}
+                  <span class="text-wow-text-dim text-xs block leading-tight">{{ getItemSubClassName(item.item_class_id, item.item_subclass_id) }}</span>{{ item.name }}
                 </router-link>
                 <button @click.stop="toggleFavorite(item)"
                   class="absolute top-1 right-1 z-10 text-sm leading-none transition-colors"

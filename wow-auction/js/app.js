@@ -50,7 +50,7 @@ const app = new Vue({
         SearchItemName: null,
         Favorites: [],
         RecentlyViewed: [],
-        SidebarView: null,
+        SidebarView: 'recent',
     },
     methods: {
         selectItem(id, name) {
@@ -102,6 +102,12 @@ const app = new Vue({
         },
         isFavorite(itemId) {
             return this.Favorites.some(f => f.id == itemId);
+        },
+        getItemSubClassName(item_class_id, item_subclass_id) {
+            const cls = this.ItemClasses.find(c => c.item_class_id == item_class_id);
+            if (!cls) return '';
+            const sub = (cls.item_subclass || []).find(s => s.item_subclass_id == item_subclass_id);
+            return sub ? sub.item_subclass_name : '';
         },
         addToRecent(item) {
             const filtered = this.RecentlyViewed.filter(r => r.id !== item.id);
