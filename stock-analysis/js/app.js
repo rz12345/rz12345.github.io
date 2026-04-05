@@ -51,6 +51,7 @@ const app = new Vue({
     el: '#app',
     router: router,
     data: {
+        lastUpdated: '',
     },
     methods: {
     },

@@ -4,9 +4,28 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              fin: {
+                bg:      '#0e0f11',
+                surface: '#131722',
+                card:    '#1a1d27',
+                border:  '#2a2e39',
+                muted:   '#4b5563',
+                green:   '#089981',
+                red:     '#f23645',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
       integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
@@ -41,30 +60,32 @@
 </script>
     <title>小貓選股</title>
   </head>
-  <body>
+  <body class="bg-fin-bg min-h-screen text-slate-200">
     <div id="app">
-      <div class="jumbotron d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-        <h3 class="my-0 mr-md-auto font-weight-normal"><i class="fas fa-paw"></i>小貓選股<i class="fas fa-paw"></i></h3>
-        <nav class="my-2 my-md-0 mr-md-3">
-            <router-link class="p-2 text-dark" :to="{
-              params:{Market:'tw'},
-              name:'market'}">台股</router-link>
-            <router-link class="p-2 text-dark" :to="{
-              params:{Market:'us'},
-              name:'market'}">美股</router-link>
-            <router-link class="p-2 text-dark" :to="{
-                name:'method'}">交易策略</router-link>
-            <router-link class="p-2 text-dark" :to="{
-                name:'about'}">關於🐈</router-link>
+      <header class="sticky top-0 z-50 flex flex-col md:flex-row items-center px-6 py-3 bg-fin-bg/95 backdrop-blur-md border-b border-fin-border shadow-lg mb-8">
+        <h3 class="text-xl font-bold text-slate-100 md:mr-auto my-1 md:my-0 tracking-tight flex items-center gap-2">
+          <svg width="22" height="14" viewBox="0 0 22 14" fill="none" class="text-fin-green flex-shrink-0">
+            <polyline points="1,13 5,7 9,10 13,3 17,6 21,1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span><i class="fas fa-paw text-amber-400"></i> 小貓選股 <i class="fas fa-paw text-amber-400"></i></span>
+          <span v-if="lastUpdated" class="text-xs text-fin-muted font-normal hidden lg:inline ml-1">更新 {{ lastUpdated }}</span>
+        </h3>
+        <nav class="flex mt-2 md:mt-0">
+          <router-link class="nav-link px-4 py-2 text-slate-400 hover:text-sky-400 transition-colors text-sm font-medium border-b-2 border-transparent" :to="{
+            params:{Market:'tw'},
+            name:'market'}">台股</router-link>
+          <router-link class="nav-link px-4 py-2 text-slate-400 hover:text-sky-400 transition-colors text-sm font-medium border-b-2 border-transparent" :to="{
+            params:{Market:'us'},
+            name:'market'}">美股</router-link>
+          <router-link class="nav-link px-4 py-2 text-slate-400 hover:text-sky-400 transition-colors text-sm font-medium border-b-2 border-transparent" :to="{
+              name:'method'}">交易策略</router-link>
+          <router-link class="nav-link px-4 py-2 text-slate-400 hover:text-sky-400 transition-colors text-sm font-medium border-b-2 border-transparent" :to="{
+              name:'about'}">關於🐈</router-link>
         </nav>
-      </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <router-view></router-view>          
-          </div>
-        </div>      
-      </div>
+      </header>
+      <main class="max-w-7xl mx-auto px-4 pb-12">
+        <router-view></router-view>
+      </main>
 
     </div>
     <script src="js/app.js"></script>
