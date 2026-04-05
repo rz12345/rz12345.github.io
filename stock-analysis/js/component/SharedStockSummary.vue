@@ -7,7 +7,7 @@
     <div class="flex gap-6 items-start">
 
       <!-- 左側主區塊 -->
-      <div style="flex: 0 0 70%; min-width: 0;">
+      <div style="flex: 0 0 80%; min-width: 0;">
 
         <h3 class="text-xs font-semibold text-fin-muted uppercase tracking-widest mb-3">投資方法</h3>
         <div class="flex flex-wrap gap-2 mb-6">
@@ -45,7 +45,7 @@
         </div>
 
         <div v-else>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <div v-for="record in sortedSummaries">
               <div class="bg-fin-card rounded-xl border border-fin-border p-4 hover:border-sky-500/40 hover:shadow-lg hover:shadow-sky-900/10 transition-all overflow-hidden"
                 :style="{ borderLeft: '4px solid ' + (record.irr >= 0 ? '#089981' : '#f23645') }">
@@ -59,14 +59,11 @@
                       query: { method: method }
                     }">{{ record.stock_id }}</router-link>
                   </h5>
-                  <span class="text-xs font-bold tabular-nums px-2 py-1 rounded border"
-                    :class="record.irr >= 0
-                      ? 'bg-fin-green/10 text-fin-green border-fin-green/30'
-                      : 'bg-fin-red/10 text-fin-red border-fin-red/30'">
-                    {{ record.irr >= 0 ? '▲' : '▼' }} {{ convertRate(record.irr) }}
-                  </span>
+                  <div class="text-right">
+                    <div class="text-xs text-slate-400">{{ record.date }}</div>
+                    <div class="text-xs text-slate-400">{{ formatCurrency(record.close) }}</div>
+                  </div>
                 </div>
-                <div class="text-xs text-slate-500 mb-3">{{ record.date }} · 收盤 {{ formatCurrency(record.close) }}</div>
 
                 <!-- 數據列 -->
                 <div class="space-y-1.5 text-sm">
@@ -111,9 +108,14 @@
         </div>
       </div>
 
-      <!-- 右側近期交易紀錄 30% -->
-      <div v-if="recent_transaction_logs.length > 0" style="flex: 0 0 30%; min-width: 0;">
+      <!-- 右側近期交易紀錄 20% -->
+      <div style="flex: 0 0 20%; min-width: 0;">
         <h3 class="text-xs font-semibold text-fin-muted uppercase tracking-widest mb-3">近期交易紀錄</h3>
+        <div v-if="recent_transaction_logs.filter(r => r.method === method).length === 0"
+          class="bg-fin-card rounded-lg border border-fin-border px-3 py-6 text-center text-slate-500">
+          <i class="fas fa-clock text-2xl mb-2 block opacity-30"></i>
+          <span class="text-xs">尚無近期交易</span>
+        </div>
         <div class="flex flex-col gap-2">
           <div v-for="record in recent_transaction_logs.filter(r => r.method === method).slice().sort((a, b) => b.irr - a.irr)">
             <router-link :to="{
