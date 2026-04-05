@@ -6,37 +6,21 @@
     <div class="space-y-3">
       <div class="bg-fin-card rounded-xl border border-fin-border overflow-hidden">
         <div class="bg-fin-surface px-5 py-4 border-b border-fin-border">
-          <h5 class="font-semibold text-slate-200">一、建立基礎抽象類 BaseStrategy</h5>
+          <h5 class="font-semibold text-slate-200">一、資金分配</h5>
         </div>
         <div class="px-5 py-4">
-          <p class="text-slate-500 text-sm mb-3">包含了一些抽象方法和屬性，如：</p>
           <ul class="divide-y divide-fin-border text-sm text-slate-400">
-            <li class="py-2">DB_PATH 資料庫路徑</li>
-            <li class="py-2">BROKER_YEAR_CASH 每年投資金額</li>
-            <li class="py-2">DIVIDEND_COLUMN 股息列名</li>
-            <li class="py-2">CLOSED_PRICE_COLUMN 收盤價列名等</li>
+            <li class="py-2"><span class="text-slate-300">回測起始日</span>：2020-01-01（台股與美股皆同）</li>
+            <li class="py-2"><span class="text-slate-300">台股</span>：每年 NT$100,000，平均分配至當年所有買入訊號</li>
+            <li class="py-2"><span class="text-slate-300">美股</span>：每年 USD$3,500，平均分配至當年所有買入訊號</li>
+            <li class="py-2"><span class="text-slate-300">定期定額</span>：每年約 12 次；台股每月約 NT$8,333，美股約 USD$292</li>
           </ul>
         </div>
       </div>
 
       <div class="bg-fin-card rounded-xl border border-fin-border overflow-hidden">
         <div class="bg-fin-surface px-5 py-4 border-b border-fin-border">
-          <h5 class="font-semibold text-slate-200">二、台股美股實體類 TwStrategy 和 UsStrategy</h5>
-        </div>
-        <div class="px-5 py-4">
-          <p class="text-slate-500 text-sm mb-3">台股美股原始資料欄位名稱不同，因此定義了兩個實體類分別繼承自 BaseStrategy，並設置不同的屬性：</p>
-          <ul class="divide-y divide-fin-border text-sm text-slate-400">
-            <li class="py-2">DB_PATH 資料庫路徑</li>
-            <li class="py-2">BROKER_YEAR_CASH 每年投資金額</li>
-            <li class="py-2">DIVIDEND_COLUMN 股息列名</li>
-            <li class="py-2">CLOSED_PRICE_COLUMN 收盤價列名等</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="bg-fin-card rounded-xl border border-fin-border overflow-hidden">
-        <div class="bg-fin-surface px-5 py-4 border-b border-fin-border">
-          <h5 class="font-semibold text-slate-200">三、買入訊號定義</h5>
+          <h5 class="font-semibold text-slate-200">二、買入訊號定義</h5>
         </div>
         <div class="px-5 py-4">
           <ol class="divide-y divide-fin-border text-sm text-slate-400">
@@ -62,7 +46,7 @@
 
       <div class="bg-fin-card rounded-xl border border-fin-border overflow-hidden">
         <div class="bg-fin-surface px-5 py-4 border-b border-fin-border">
-          <h5 class="font-semibold text-slate-200">四、執行策略</h5>
+          <h5 class="font-semibold text-slate-200">三、執行策略</h5>
         </div>
         <div class="px-5 py-4">
           <p class="text-slate-500 text-sm mb-3">根據傳入的股票數據和策略名稱，執行相應的策略。其中包括：</p>
