@@ -42,19 +42,19 @@
           <ol class="divide-y divide-fin-border text-sm text-slate-400">
             <li class="py-3 flex gap-3 items-start">
               <span class="text-sky-400 font-bold tabular-nums mt-px">01</span>
-              <span><span class="text-sky-300 font-medium">bt_signals</span>：當移動平均匯聚背離指標(MACD)由負轉正，且 RSI 低於 50 時買入。</span>
+              <span><span class="text-sky-300 font-medium">MACD 訊號</span>：當移動平均匯聚背離指標(MACD)由負轉正，且 RSI 低於 50 時買入。</span>
             </li>
             <li class="py-3 flex gap-3 items-start">
               <span class="text-sky-400 font-bold tabular-nums mt-px">02</span>
-              <span><span class="text-sky-300 font-medium">bt_dividend</span>：在除息後買入。</span>
+              <span><span class="text-sky-300 font-medium">除息策略</span>：在除息後買入。</span>
             </li>
             <li class="py-3 flex gap-3 items-start">
               <span class="text-sky-400 font-bold tabular-nums mt-px">03</span>
-              <span><span class="text-sky-300 font-medium">bt_ma_pullback</span>：當股價回測到移動平均線（MA）支撐時買入。</span>
+              <span><span class="text-sky-300 font-medium">均線回測</span>：當股價回測到移動平均線（MA）支撐時買入。</span>
             </li>
             <li class="py-3 flex gap-3 items-start">
               <span class="text-sky-400 font-bold tabular-nums mt-px">04</span>
-              <span><span class="text-sky-300 font-medium">bt_monthly_dca</span>：每月固定買入，不擇時進場，長期累積持股。</span>
+              <span><span class="text-sky-300 font-medium">定期定額</span>：每月固定買入，不擇時進場，長期累積持股。</span>
             </li>
           </ol>
         </div>
