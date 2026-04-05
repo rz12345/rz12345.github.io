@@ -62,15 +62,17 @@ const app = new Vue({
             if (item) this.addToRecent(item);
         },
         selectItemClass(id,name) {
+            this.SidebarView = null;
             if(id == this.Select.ItemClass){
                 this.Select.ItemClass = null;
                 this.Select.ItemClassName = null;
             } else {
                 this.Select.ItemClass = id;
                 this.Select.ItemClassName = name;
-            }            
+            }
         },
         selectItemSubClass(id, name) {
+            this.SidebarView = null;
             this.Select.ItemSubClass = id;
             this.Select.ItemSubClassName = name;
         },
