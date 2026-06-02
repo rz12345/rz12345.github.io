@@ -7,9 +7,9 @@
     <!-- Slot reel display -->
     <div class="mb-6 bg-lucky-bg rounded-lg p-6 border-2 border-lucky-gold overflow-hidden">
       <div class="text-center">
-        <div class="slot-reel-container h-24 flex items-center justify-center relative">
+        <div class="slot-reel-container h-24 relative">
           <div
-            class="slot-reel w-full"
+            class="slot-reel w-full absolute top-0 left-0"
             :style="{ transform: `translateY(${reelOffset}px)` }"
             ref="reel"
           >
@@ -132,16 +132,27 @@ module.exports = {
     },
     buildReel(winnerOption) {
       const pool = this.$parent.getPool();
-      const shuffled = [...pool].sort(() => Math.random() - 0.5);
+      const source = pool.length > 0 ? pool : [winnerOption];
 
-      // Create a long sequence + winner at end
-      const sequence = [];
-      for (let i = 0; i < 10; i++) {
-        sequence.push(...shuffled);
+      // The reel is a single transformed element. Its total height must stay
+      // below the GPU max texture size (commonly 16384px) — otherwise the part
+      // beyond the limit fails to composite and renders blank during the spin.
+      const ITEM_HEIGHT = 96; // h-24, must match animateReel()
+      const MAX_REEL_PX = 13000; // safety margin under the 16384px texture limit
+      const maxItems = Math.max(2, Math.floor(MAX_REEL_PX / ITEM_HEIGHT));
+      const fillerCount = maxItems - 1; // leave room for the winner at the end
+
+      // Fill with shuffled repeats of the pool so the spin looks varied.
+      const filler = [];
+      while (filler.length < fillerCount) {
+        const shuffled = [...source].sort(() => Math.random() - 0.5);
+        for (const item of shuffled) {
+          if (filler.length >= fillerCount) break;
+          filler.push(item);
+        }
       }
-      sequence.push(winnerOption);
 
-      this.reelItems = sequence;
+      this.reelItems = [...filler, winnerOption];
     },
     animateReel() {
       const itemHeight = 96; // h-24 = 96px
