@@ -1,0 +1,4 @@
+.playwright-mcp/
+.claude/Task.md
+.claude/Todo.md
+*.docx

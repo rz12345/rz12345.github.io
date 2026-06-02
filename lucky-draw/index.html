@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lucky: {
+              bg:      '#0f1419',
+              surface: '#1a1f2e',
+              card:    '#242a38',
+              border:  '#3a4150',
+              muted:   '#6b7280',
+              gold:    '#fbbf24',
+              red:     '#ef4444',
+              green:   '#10b981',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="css/app.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js"
+    integrity="sha512-BKbSR+cfyxLdMAsE0naLReFSLg8/pjbgfxHh/k/kUC82Hy7r6HtR5hLhobaln2gcTvzkyyehrdREdjpsQwy2Jw=="
+    crossorigin="anonymous"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.4.3/vue-router.min.js"
+    integrity="sha512-mVyZZ423iwLddhRdWCJeQSysHfnDZZPJRlY9HJI6/39e6D8Myz3nQCelJmSMOf8MOreTzWDmh8bYftrBnTau1Q=="
+    crossorigin="anonymous"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.2/src/httpVueLoader.min.js"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TJWWQVVMP3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TJWWQVVMP3',{});
+  </script>
+  <title>通用抽獎機</title>
+</head>
+<body class="bg-lucky-bg min-h-screen text-slate-200">
+  <div id="app">
+    <header class="sticky top-0 z-50 flex flex-col md:flex-row items-center px-6 py-3 bg-lucky-bg/95 backdrop-blur-md border-b border-lucky-border shadow-lg mb-8">
+      <h3 class="text-xl font-bold text-slate-100 md:mr-auto my-1 md:my-0 tracking-tight flex items-center gap-2">
+        <i class="fas fa-dice text-lucky-gold"></i>
+        <span>通用抽獎機</span>
+        <i class="fas fa-dice text-lucky-gold"></i>
+      </h3>
+      <nav class="flex mt-2 md:mt-0">
+        <a href="../" class="px-4 py-2 text-slate-400 hover:text-sky-400 transition-colors text-sm font-medium">← 回首頁</a>
+      </nav>
+    </header>
+    <main class="max-w-6xl mx-auto px-4 pb-12">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- SlotMachine -->
+        <div class="lg:col-span-2">
+          <slot-machine :options="options" :draw-mode="drawMode" :on-draw="handleDraw" :on-toggle-mode="toggleMode" :on-reset="resetDrawn" :drawn-ids="drawnIds" :history="history"></slot-machine>
+        </div>
+        <!-- OptionEditor -->
+        <div class="lg:col-span-1">
+          <option-editor :options="options" :on-load-demo="loadDemo" :on-export="exportConfig" :on-import="importConfig" :on-update="updateOptions"></option-editor>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="js/demoData.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
